@@ -1,88 +1,59 @@
-import moment from "moment";
+"use client";
+import { useEffect, useState } from "react";
 import BlogCard from "../components/BlogCard";
 
 export default function Blog() {
-    const dummyEvents = [
-        {
-          id: "1",
-          title: "Dhaka Marathon 2025",
-          slug: "dhaka-marathon-2025",
-          featureImage: "https://images.unsplash.com/600x400/?marathon,run",
-          organizer: { title: "Bangladesh Athletics Federation" },
-          location: { city: "Dhaka" },
-          startDateTime: "2025-02-15T06:00:00Z",
-          endDateTime: "2025-02-15T12:00:00Z",
-          price: "800TK",
-        },
-        {
-          id: "2",
-          title: "Chattogram Half Marathon",
-          slug: "chattogram-half-marathon",
-          featureImage: "https://images.unsplash.com/600x400/?runners,marathon",
-          organizer: { title: "Chattogram Runners Club" },
-          location: { city: "Chattogram" },
-          startDateTime: "2025-03-10T05:30:00Z",
-          endDateTime: "2025-03-10T10:30:00Z",
-          price: "600TK",
-        },
-        {
-          id: "3",
-          title: "Cox’s Bazar Beach Marathon",
-          slug: "coxs-bazar-beach-marathon",
-          featureImage: "https://images.unsplash.com/600x400/?beach,marathon",
-          organizer: { title: "Cox’s Bazar Tourism Club" },
-          location: { city: "Cox’s Bazar" },
-          startDateTime: "2025-04-05T06:00:00Z",
-          endDateTime: "2025-04-05T11:00:00Z",
-          price: "1000TK",
-        },
-        {
-          id: "4",
-          title: "Sylhet International Marathon",
-          slug: "sylhet-international-marathon",
-          featureImage: "https://images.unsplash.com/600x400/?city,marathon",
-          organizer: { title: "Sylhet Runners Association" },
-          location: { city: "Sylhet" },
-          startDateTime: "2025-05-20T06:00:00Z",
-          endDateTime: "2025-05-20T12:00:00Z",
-          price: "750TK",
-        },
-        {
-          id: "5",
-          title: "Bangladesh Charity Run 2025",
-          slug: "bangladesh-charity-run-2025",
-          featureImage: "https://images.unsplash.com/600x400/?charity,marathon",
-          organizer: { title: "Bangladesh Charity Foundation" },
-          location: { city: "Khulna" },
-          startDateTime: "2025-06-15T06:30:00Z",
-          endDateTime: "2025-06-15T11:30:00Z",
-          price: "500TK",
-        },
-      ];
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchBlogs() {
+      try {
+        const response = await fetch(
+          `https://zoraithost.com/cms/api/get-req-data/blog-list`
+        );
+        const data = await response.json();
+
+        if (data.status === 200) {
+          // Filtering only 'blog' category
+          setBlogs(data);
+        } else {
+          setError("Failed to fetch blogs");
+        }
+      } catch (err) {
+        setError("Error fetching data");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBlogs();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-gray-300 border-t-[#C02130] rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <section className="py-16 px-4 md:px-6 lg:px-8 pt-[120px] ">
-            <div className="max-w-[1300px] mx-auto">
-              <h2 className="text-4xl text-[#C02130] md:text-5xl lg:text-[64px] font-bold md:font-black text-center mb-12">
-                Blog
-              </h2>
-    
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {dummyEvents.map((event) => (
-                  <BlogCard
-                    key={event.id}
-                    title={event.title}
-                    featureImage={event.featureImage}
-                    organizer={event.organizer.title}
-                    location={event.location.city}
-                    startDate={moment(event.startDateTime).format("MMM Do")}
-                    endDateTime={moment(event.endDateTime).format(
-                      "MMMM Do, YYYY h:mm A"
-                    )}
-                    price="500TK"
-                  />
-                ))}
-              </div>
-            </div>
-          </section>
-  )
+      <div className="max-w-[1300px] mx-auto">
+        <h2 className="text-4xl text-[#C02130] md:text-5xl lg:text-[64px] font-bold md:font-black text-center mb-12">
+          Blog
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {blogs?.data?.map((blog) => {
+            console.log(blog?.images?.list?.[0]?.full_path);
+            return (
+              <BlogCard key={blog?.data?.id} title={blog?.data?.title} body={blog?.data?.body} thumbnail={blog?.images?.list?.[0]?.full_path} shortDesc={blog?.data?.body} slug={blog?.data?.slug} />
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  );
 }
