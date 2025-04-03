@@ -1,10 +1,12 @@
 'use client'
 
-import { Mail, MapPin, Phone } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
+import { Mail, MapPin, Phone } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import ReactHtmlParser from "react-html-parser";
 
-export default function InnerBanner() {
+
+export default function InnerBanner({bgImage, title, info}) {
   // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   //   e.preventDefault()
   //   // Add form submission logic here
@@ -36,8 +38,8 @@ export default function InnerBanner() {
       {/* Hero Section */}
       <div className="relative h-[400px] md:h-[500px]">
         <Image
-          src="https://ultracamprunners.com/wp-content/uploads/2024/10/WhatsApp-Image-2024-10-28-at-1.24.09-AM-1.jpeg"
-          alt="Ultra Camp Runners team"
+          src={bgImage}
+          alt={title}
           fill
           className="object-top object-cover"
           priority
@@ -52,21 +54,27 @@ export default function InnerBanner() {
       <div className="w-full bg-white my-6 md:my-8 lg:my-10 py-6 px-4 md:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
-            {contactInfo.map((item, index) => (
-              <Link
-                key={index}
-                href={item.href}
+            
+            {
+              info?.posts?.list?.map(item => {
+                console.log(item)
+                return (
+                  <Link
+                key={1}
+                href={'#'}
                 className="group flex flex-col md:flex-row items-center gap-3 transition-colors hover:text-[#AD242F]"
               >
                 <div className="p-2 rounded-full bg-[#AD242F] text-white group-hover:bg-[#AD242F]/90">
-                  {item.icon}
+                  icon
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg text-[#AD242F]">{item.title}</h3>
-                  <p className="text-muted-foreground group-hover:text-[#AD242F]">{item.content}</p>
+                  <h3 className="font-semibold text-lg text-[#AD242F]">{item?.data?.title}</h3>
+                  <p className="text-muted-foreground group-hover:text-[#AD242F]">{ReactHtmlParser(item?.data?.description)}</p>
                 </div>
               </Link>
-            ))}
+                )
+              })
+            }
           </div>
         </div>
       </div>

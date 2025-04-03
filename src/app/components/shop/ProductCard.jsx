@@ -2,12 +2,11 @@
 
 import Image from 'next/image'
 
-
-export default function ProductCard({ image, category, name, price, isSoldOut = false }) {
+export default function ProductCard({ image, category, name, price, isSoldOut }) {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md border hover:shadow-lg transition max-w-[280px]">
+    <div className="bg-white flex flex-col justify-between p-4 rounded-lg shadow-md border hover:shadow-lg transition ">
       {/* Image Container */}
-      <div className="relative">
+      <div className="relative w-full h-[280px] overflow-hidden rounded-lg">
         {isSoldOut && (
           <span className="absolute top-2 left-2 bg-black text-white text-xs font-bold px-2 py-1 rounded-md">
             SOLD OUT
@@ -16,9 +15,8 @@ export default function ProductCard({ image, category, name, price, isSoldOut = 
         <Image
           src={image}
           alt={name}
-          width={300}
-          height={300}
-          className="rounded-lg w-full object-cover"
+          layout="fill" // Makes the image take full width and height of its parent
+          objectFit="cover" // Ensures the image fills the container without distortion
         />
       </div>
 
@@ -27,15 +25,6 @@ export default function ProductCard({ image, category, name, price, isSoldOut = 
         <h2 className="text-lg font-bold">{name}</h2>
         <p className="text-lg font-semibold text-gray-700">{price}৳</p>
         <p className="text-sm text-gray-500 uppercase mt-1">{category}</p>
-
-        {/* Buy Now Button */}
-        {/* <button
-          className={`mt-3 px-4 py-2 text-white text-sm font-bold rounded-md w-full 
-          ${isSoldOut ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'}`}
-          disabled={isSoldOut}
-        >
-          Buy Now
-        </button> */}
       </div>
     </div>
   )

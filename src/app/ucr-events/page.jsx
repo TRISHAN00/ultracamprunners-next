@@ -8,11 +8,13 @@ export default function UCREvents() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     async function fetchEvents() {
       try {
         const response = await fetch(
-          `https://zoraithost.com/cms/api/get-req-data/all-products?image=yes&post=no&file=&specification=&gallery=&variation=&limit=`
+          `${API_BASE_URL}/get-req-data/all-products?image=yes&post=no&file=&specification=&gallery=&variation=&limit=`
         );
         const data = await response.json();
 
@@ -32,7 +34,7 @@ export default function UCREvents() {
       }
     }
     fetchEvents();
-  }, []);
+  }, [API_BASE_URL]);
 
   if (loading) {
     return (

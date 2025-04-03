@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Facebook, Linkedin, Twitter } from "lucide-react";
+import { Calendar } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -55,7 +55,7 @@ export default function BlogDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center p-6 pt-[120px] ">
+    <div className="min-h-screen bg-gray-100 flex justify-center p-6 pt-[120px] pb-[120px] ">
       <div className="max-w-[1300px] mx-auto w-full bg-white p-6 rounded-lg shadow-md">
         {/* Blog Title */}
         {title && (
@@ -89,25 +89,11 @@ export default function BlogDetails() {
         </div>
 
         {/* Blog Content */}
-        <div className="mt-6 text-gray-700 space-y-4">
+        <div className="mt-6 text-gray-700 space-y-5">
           {ReactHtmlParser(body)}
         </div>
 
-        {/* Share Section */}
-        <div className="mt-6 flex justify-between items-center border-t pt-4">
-          <p className="text-gray-600 font-semibold">Share this article:</p>
-          <div className="flex gap-3">
-            <button className="flex items-center bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
-              <Facebook className="w-4 h-4 mr-1" /> Facebook
-            </button>
-            <button className="flex items-center bg-blue-400 text-white px-3 py-1 rounded hover:bg-blue-500">
-              <Twitter className="w-4 h-4 mr-1" /> Twitter
-            </button>
-            <button className="flex items-center bg-blue-800 text-white px-3 py-1 rounded hover:bg-blue-900">
-              <Linkedin className="w-4 h-4 mr-1" /> LinkedIn
-            </button>
-          </div>
-        </div>
+      
       </div>
     </div>
   );

@@ -7,11 +7,13 @@ export default function Blog() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     async function fetchBlogs() {
       try {
         const response = await fetch(
-          `https://zoraithost.com/cms/api/get-req-data/blog-list`
+          `${API_BASE_URL}/get-req-data/blog-list`
         );
         const data = await response.json();
 
@@ -28,7 +30,7 @@ export default function Blog() {
       }
     }
     fetchBlogs();
-  }, []);
+  }, [API_BASE_URL]);
 
   if (loading) {
     return (
@@ -47,7 +49,6 @@ export default function Blog() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogs?.data?.map((blog) => {
-            console.log(blog?.images?.list?.[0]?.full_path);
             return (
               <BlogCard key={blog?.data?.id} title={blog?.data?.title} body={blog?.data?.body} thumbnail={blog?.images?.list?.[0]?.full_path} shortDesc={blog?.data?.body} slug={blog?.data?.slug} />
             )
