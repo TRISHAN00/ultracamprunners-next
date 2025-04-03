@@ -13,12 +13,13 @@ export default function BlogDetails() {
   const [blogDetail, setblogDetail] = useState();
   const path = useParams();
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     async function fetchblogs() {
       try {
         const response = await fetch(
-          `https://zoraithost.com/cms/api/get-req-data/blog-data?type=slug&value=${path.blog}`
+          `${API_BASE_URL}/get-req-data/blog-data?type=slug&value=${path.blog}`
         );
         const data = await response.json();
         setblogDetail(data);
@@ -30,7 +31,7 @@ export default function BlogDetails() {
     }
 
     fetchblogs();
-  }, [path.blog]);
+  }, [API_BASE_URL, path.blog]);
 
   const title = blogDetail?.data?.data?.title;
   const body = blogDetail?.data?.data?.body;

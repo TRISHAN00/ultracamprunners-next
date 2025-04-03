@@ -9,6 +9,8 @@ export default function EventRegistration() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [eventsDetail, setEventDetail] = useState(null);
+  const [paymentStatus, setPaymentStatus] = useState(null);
+
   const pathname = useParams();
 
   const { register, handleSubmit, reset } = useForm({ mode: "all" });
@@ -27,10 +29,11 @@ export default function EventRegistration() {
     thana: "",
     date_of_birth: "",
     tshirt_size: "",
-    km: "",
-    payment: "",
     cv: null,
   });
+
+
+
 
   // Fetch Event Data
   useEffect(() => {
@@ -73,6 +76,8 @@ export default function EventRegistration() {
     e.preventDefault();
     setLoading(true);
 
+
+
     let api_services =
       "https://zoraithost.com/cms/api/post-req-data/form-submit";
 
@@ -91,7 +96,7 @@ export default function EventRegistration() {
     formInputData.append("km", km);
     formInputData.append("payment", price);
     formInputData.append("file", formData.cv);
-
+    
     try {
       const response = await fetch(api_services, {
         method: "POST",
