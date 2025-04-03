@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useEffect, useState } from "react";
 import About from "../components/home/About";
 
@@ -6,11 +6,13 @@ export default function AboutUs() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     async function fetchData() {
       try {
         const res = await fetch(
-          "https://zoraithost.com/cms/api/get-req-data/sections?type=slug&value=home&get_section=yes&image=yes&post=yes&file=no&gallery=no"
+          `${API_BASE_URL}/get-req-data/sections?type=slug&value=home&get_section=yes&image=yes&post=yes&file=no&gallery=no`
         );
         const result = await res.json();
         setData(result);
@@ -22,7 +24,7 @@ export default function AboutUs() {
     }
 
     fetchData();
-  }, []);
+  }, [API_BASE_URL]);
 
   if (loading) {
     return (
@@ -35,6 +37,7 @@ export default function AboutUs() {
   const aboutUs = data?.data?.sections?.find(
     (f) => f?.section_data?.slug === "about-us"
   );
+
   return (
     <div className="pt-[120px] pb-[120px]">
       <About data={aboutUs} />
