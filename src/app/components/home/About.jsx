@@ -1,5 +1,5 @@
+import parse from 'html-react-parser';
 import Image from "next/image";
-import ReactHtmlParser from "react-html-parser";
 import { FaRunning } from "react-icons/fa";
 import Button from "../Button";
 
@@ -15,11 +15,11 @@ export default function About({ data }) {
           </div>
 
           <h2 className="text-3xl md:text-4xl font-bold text-[#AD242F]">
-            {ReactHtmlParser(data?.section_data?.short_desc)}
+            {parse(data?.section_data?.short_desc)}
           </h2>
 
           <p className="text-muted-foreground">
-            {ReactHtmlParser(data?.section_data?.description)}
+            {parse(data?.section_data?.description)}
           </p>
 
           <Button title={"Learn More"} path="/about" bgColor={"#AD242F"} />
@@ -47,7 +47,7 @@ export default function About({ data }) {
                   {item?.data?.title}
                 </h3>
                 <p className="text-muted-foreground text-md">
-                  {ReactHtmlParser(item?.data?.description)}
+                  {parse(item?.data?.description)}
                 </p>
               </div>
             );

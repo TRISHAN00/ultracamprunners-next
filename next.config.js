@@ -1,15 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: true,
-  },
-  bodyParser: {
-    sizeLimit: "10mb",
-  },
   images: {
     remotePatterns: [
       {
-        protocol: "http",  // Add http support for localhost
+        protocol: "http",  // Allows loading images from localhost
         hostname: "localhost",
       },
       {
@@ -32,4 +26,5 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+// **Make sure you use module.exports to export the config**
+module.exports = nextConfig;

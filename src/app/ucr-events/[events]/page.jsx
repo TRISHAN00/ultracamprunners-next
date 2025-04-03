@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
+import parse from 'html-react-parser';
 import { AlertTriangle, Calendar, Clock, MapPin, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import ReactHtmlParser from "react-html-parser";
 
 export default function EventPage() {
   const [loading, setLoading] = useState(true);
@@ -117,7 +117,7 @@ export default function EventPage() {
                       <Clock className="h-5 w-5 mr-3 text-[#a52931]" />
                       <div>
                         <p>Cut-off Times:</p>
-                        {ReactHtmlParser(
+                        {parse(
                           eventsDetail?.data?.product_data?.description
                         )}
                       </div>
@@ -198,7 +198,7 @@ export default function EventPage() {
                     Important Notes
                   </h2>
                   {importantNotes?.data?.description &&
-                    ReactHtmlParser(importantNotes?.data?.description)}
+                    parse(importantNotes?.data?.description)}
                 </div>
               )}
             </div>

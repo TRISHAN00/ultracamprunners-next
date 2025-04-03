@@ -1,5 +1,5 @@
+import parse from 'html-react-parser';
 import Image from 'next/image';
-import ReactHtmlParser from "react-html-parser";
 import Button from '../Button';
 
 
@@ -14,7 +14,7 @@ export default function JoinInfo({data}) {
             <p className="text-lg font-medium opacity-90">{data?.section_data?.subtitle}</p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">{data?.section_data?.title}</h1>
             <p className="text-lg opacity-90 max-w-xl">
-              {ReactHtmlParser(data?.section_data?.description)}
+              {parse(data?.section_data?.description)}
             
             </p>
             <Button title={'Join Now'} path={data?.section_data?.search_slug} />

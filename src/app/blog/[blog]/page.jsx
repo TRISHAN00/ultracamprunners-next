@@ -1,10 +1,11 @@
 "use client";
 
+import parse from 'html-react-parser';
 import { Calendar } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import ReactHtmlParser from "react-html-parser";
+
 
 export default function BlogDetails() {
   const [loading, setLoading] = useState(true);
@@ -12,7 +13,6 @@ export default function BlogDetails() {
   const [blogDetail, setblogDetail] = useState();
   const path = useParams();
 
-  console.log(blogDetail);
 
   useEffect(() => {
     async function fetchblogs() {
@@ -60,7 +60,7 @@ export default function BlogDetails() {
         {/* Blog Title */}
         {title && (
           <h1 className="text-3xl font-bold text-gray-900">
-            {ReactHtmlParser(title)}
+            {parse(title || "")}
           </h1>
         )}
 
@@ -90,7 +90,7 @@ export default function BlogDetails() {
 
         {/* Blog Content */}
         <div className="mt-6 text-gray-700 space-y-5">
-          {ReactHtmlParser(body)}
+          {parse(body)}
         </div>
 
       

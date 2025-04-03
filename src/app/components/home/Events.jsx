@@ -1,5 +1,5 @@
+import parse from 'html-react-parser';
 import { useEffect, useState } from "react";
-import ReactHtmlParser from "react-html-parser";
 import EventCard from "../EventCard";
 
 const dummyEvents = [
@@ -80,7 +80,7 @@ export default function UpcomingEvents({ title }) {
       <div className="max-w-[1300px] mx-auto">
         {title?.section_data?.subtitle && (
           <h2 className="text-4xl md:text-5xl lg:text-[64px] font-bold md:font-black text-center mb-12">
-            {ReactHtmlParser(title?.section_data?.subtitle)}
+            {parse(title?.section_data?.subtitle)}
           </h2>
         )}
 

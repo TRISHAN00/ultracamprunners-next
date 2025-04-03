@@ -1,4 +1,4 @@
-import ReactHtmlParser from "react-html-parser";
+import parse from 'html-react-parser';
 import Button from "../Button";
 
 export default function ExploreEvents({ data }) {
@@ -7,7 +7,7 @@ export default function ExploreEvents({ data }) {
     <section className="py-16 px-4 md:px-6 lg:px-8 bg-[#F4F5F6]">
       <div className="max-w-[1300px] mx-auto text-center space-y-4 mb-8">
         <h2 className="text-4xl md:text-5xl lg:text-[64px] font-bold md:font-black">
-          {ReactHtmlParser(data?.section_data?.subtitle)}
+          {parse(data?.section_data?.subtitle)}
         </h2>
         <p className="text-muted-foreground text-md max-w-3xl mx-auto">
           {data?.section_data?.short_desc}

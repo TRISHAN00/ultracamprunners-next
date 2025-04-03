@@ -1,9 +1,9 @@
 "use client";
 
+import parse from 'html-react-parser';
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import ReactHtmlParser from "react-html-parser";
 import {
   FaFacebook,
   FaLinkedinIn,
@@ -49,10 +49,10 @@ export default function Hero({ data }) {
         {/* Content */}
         <div className=" z-10 text-center  mx-auto text-white px-4">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            {ReactHtmlParser(data?.section_data?.subtitle)}
+            {parse(data?.section_data?.subtitle || "")}
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-gray-100">
-            {ReactHtmlParser(data?.section_data?.short_desc)}
+            {parse(data?.section_data?.short_desc)}
           </p>
 
           <div className="flex justify-center">
@@ -80,7 +80,7 @@ export default function Hero({ data }) {
               })}
             </div>
             <p className="mt-4 text-lg">
-              {ReactHtmlParser(data?.section_data?.description)}
+              {parse(data?.section_data?.description)}
             </p>
           </div>
         </div>

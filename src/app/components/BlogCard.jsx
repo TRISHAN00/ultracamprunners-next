@@ -1,6 +1,6 @@
+import parse from 'html-react-parser';
 import Image from "next/image";
 import Link from "next/link";
-import ReactHtmlParser from "react-html-parser";
 
 export default function BlogCard({ title, thumbnail, shortDesc, slug }) {
   return (
@@ -20,13 +20,14 @@ export default function BlogCard({ title, thumbnail, shortDesc, slug }) {
       <div className="p-4">
         {title && (
           <h2 className="text-lg font-bold text-red-700">
-            {ReactHtmlParser(title)}
+            {parse(title)}
           </h2>
         )}
 
-        <p className="text-gray-700 text-sm mt-2 line-clamp-4">
-         {ReactHtmlParser(shortDesc)}
-        </p>
+<p className="text-gray-700 text-sm mt-2 line-clamp-4">
+  {parse(shortDesc || "")}
+</p>
+
         <Link
           href={`blog/${slug}`}
           className="text-red-600 font-medium flex items-center mt-3 hover:underline"

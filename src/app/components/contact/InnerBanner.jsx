@@ -1,9 +1,9 @@
 'use client'
 
+import parse from 'html-react-parser';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import ReactHtmlParser from "react-html-parser";
 
 
 export default function InnerBanner({bgImage, title, info}) {
@@ -69,7 +69,7 @@ export default function InnerBanner({bgImage, title, info}) {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg text-[#AD242F]">{item?.data?.title}</h3>
-                  <p className="text-muted-foreground group-hover:text-[#AD242F]">{ReactHtmlParser(item?.data?.description)}</p>
+                  <p className="text-muted-foreground group-hover:text-[#AD242F]">{parse(item?.data?.description)}</p>
                 </div>
               </Link>
                 )
