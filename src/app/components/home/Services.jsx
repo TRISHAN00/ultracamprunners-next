@@ -8,9 +8,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
-
-
-const services  = [
+const services = [
   {
     title: "Event Registration",
     icon: <ClipboardList className="w-5 h-5" />,
@@ -55,7 +53,8 @@ const services  = [
   },
 ];
 
-export default function Services() {
+export default function Services({ data }) {
+  console.log(data);
   return (
     <section className="py-16 px-4 md:px-6 lg:px-8">
       <div className="max-w-[1300px] mx-auto">
@@ -66,20 +65,27 @@ export default function Services() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {services.map((service, index) => (
-        <div key={index} className="bg-white shadow-lg rounded-lg overflow-hidden">
-          <Image
-            src={service.image}
-            alt={service.alt}
-            width={400}
-            height={250}
-            className="w-full h-48 object-cover"
-          />
-          <div className="p-4">
-            <h3 className="text-lg font-semibold text-red-700">{service.title}</h3>
-          </div>
-        </div>
-      ))}
+          {data?.posts?.list?.map((service, index) => {
+            return (
+              <div
+                key={index}
+                className="bg-white shadow-lg rounded-lg overflow-hidden"
+              >
+                <Image
+                  src={service?.images?.[0]?.full_path}
+                  alt={service.alt}
+                  width={400}
+                  height={250}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-red-700">
+                    {service?.data?.title}
+                  </h3>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

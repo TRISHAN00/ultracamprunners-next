@@ -70,6 +70,10 @@ export default function Home() {
     (f) => f?.section_data?.slug === "counter"
   );
 
+  const ourServices = data?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "our-services"
+  );
+
 
   return (
     <>
@@ -82,7 +86,7 @@ export default function Home() {
       <GallerySection data={gallery} />
       <BlogSection />
       <StatsSection data={counter} />
-      <Services />
+      <Services data={ourServices} />
     </>
   );
 }
