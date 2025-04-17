@@ -49,9 +49,9 @@ export default function Blog() {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogs?.data?.map((blog) => {
+          {blogs?.data?.map((blog, index) => {
             return (
-              <BlogCard key={blog?.data?.id} title={blog?.data?.title} body={blog?.data?.body} thumbnail={blog?.images?.list?.[0]?.full_path} shortDesc={blog?.data?.body} slug={blog?.data?.slug} />
+              <BlogCard key={index} blog={blog}    />
             )
           })}
         </div>

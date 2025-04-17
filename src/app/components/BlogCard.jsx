@@ -1,14 +1,14 @@
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function BlogCard({ title, thumbnail, shortDesc, slug }) {
+export default function BlogCard({ blog }) {
   return (
     <div className="mx-auto p-4 bg-white rounded-xl shadow-md overflow-hidden border">
       {/* Image Section */}
       <div className="relative">
         <Image
-          src={thumbnail}
+          src={blog?.images?.list?.[0]?.full_path}
           alt="Blog Cover"
           width={400}
           height={300}
@@ -18,18 +18,18 @@ export default function BlogCard({ title, thumbnail, shortDesc, slug }) {
 
       {/* Content Section */}
       <div className="p-4">
-        {title && (
+        {blog?.data?.title && (
           <h2 className="text-lg font-bold text-red-700">
-            {parse(title)}
+            {parse(blog?.data?.title)}
           </h2>
         )}
 
-<p className="text-gray-700 text-sm mt-2 line-clamp-4">
-  {parse(shortDesc || "")}
-</p>
+        <p className="text-gray-700 text-sm mt-2 line-clamp-4">
+          {parse(blog?.data?.body || "")}
+        </p>
 
         <Link
-          href={`blog/${slug}`}
+          href={`blog/${blog?.data?.slug}`}
           className="text-red-600 font-medium flex items-center mt-3 hover:underline"
         >
           Click here
