@@ -24,9 +24,9 @@ export default function BlogCard({ blog }) {
           </h2>
         )}
 
-        <p className="text-gray-700 text-sm mt-2 line-clamp-4">
+        <div className="text-gray-700 text-sm mt-2 line-clamp-4">
           {parse(blog?.data?.body || "")}
-        </p>
+        </div>
 
         <Link
           href={`blog/${blog?.data?.slug}`}

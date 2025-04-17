@@ -66,6 +66,11 @@ export default function Home() {
     (f) => f?.section_data?.slug === "our-gallery"
   );
 
+  const counter = data?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "counter"
+  );
+
+
   return (
     <>
       <Hero data={hero} />
@@ -76,7 +81,7 @@ export default function Home() {
       <JoinUCR data={joinUs} />
       <GallerySection data={gallery} />
       <BlogSection />
-      <StatsSection />
+      <StatsSection data={counter} />
       <Services />
     </>
   );

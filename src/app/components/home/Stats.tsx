@@ -4,25 +4,10 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
-interface Stat {
-  value: number;
-  label: string;
-  prefix: string;
-}
-
-const stats: Stat[] = [
-  { value: 14, label: "Events", prefix: "+" },
-  { value: 17659, label: "Members", prefix: "+" },
-  { value: 13100, label: "Runners", prefix: "+" },
-];
-
-const AnimatedNumber = ({ value }: { value: number }) => {
+const AnimatedNumber = ({ value }) => {
   const motionValue = useMotionValue(0);
-  const springValue = useSpring(motionValue, {
-    damping: 50,
-    stiffness: 100,
-  });
-  const numberRef = useRef<HTMLSpanElement>(null);
+  const springValue = useSpring(motionValue, { damping: 50, stiffness: 100 });
+  const numberRef = useRef(null);
 
   useEffect(() => {
     motionValue.set(value);
@@ -39,20 +24,23 @@ const AnimatedNumber = ({ value }: { value: number }) => {
   return <span ref={numberRef} />;
 };
 
-export default function StatsSection() {
-  const { ref, inView } = useInView({
-    threshold: 0.3,
-    triggerOnce: true,
-  });
+export default function StatsSection({ data }) {
+  const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
+
+  const stats = data?.posts?.list?.map((item) => ({
+    label: item.data.title,
+    value: parseInt(item.data.description.replace(/,/g, ""), 10),
+    prefix: "+",
+  }));
 
   return (
     <section className="relative min-h-[500px] flex items-center">
-      {/* Background Image */}
+      {/* Background */}
       <div className="absolute inset-0">
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed"
           style={{
-            backgroundImage: `url('https://ultracamprunners.com/wp-content/uploads/2024/09/65ada0c2a1510-scaled.jpeg')`,
+            backgroundImage: `url('${data?.images?.list?.[0]?.full_path}')`,
           }}
         />
         <div className="absolute inset-0 bg-black/60" />
@@ -72,7 +60,7 @@ export default function StatsSection() {
           </motion.h2>
 
           <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {stats.map((stat, index) => (
+            {stats?.map((stat, index) => (
               <motion.div
                 key={stat.label}
                 className="text-center"
