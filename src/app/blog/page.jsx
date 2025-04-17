@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import BlogCard from "../components/BlogCard";
 
+
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
