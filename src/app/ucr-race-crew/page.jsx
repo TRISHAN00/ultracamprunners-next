@@ -1,108 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import person1 from '../../app/assets/crew/person-01.jpg';
-import person from '../../app/assets/crew/person.jpg';
 import InnerBanner from "../components/InnerBanner";
 import TeamSection from "../components/ucrCrew/TeamSection";
 
-const teamMembers = [
-  {
-    id: 1,
-    name: "John Doe",
-    title: "Volunteer",
-    image: person,
-    socials: [
-      { type: "linkedin", url: "#" },
-      { type: "facebook", url: "#" },
-      { type: "youtube", url: "#" },
-      { type: "website", url: "#" },
-      { type: "behance", url: "#" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Michael Smith",
-    title: "Volunteer",
-    image: person1,
-    socials: [
-      { type: "linkedin", url: "#" },
-      { type: "facebook", url: "#" },
-      { type: "youtube", url: "#" },
-      { type: "website", url: "#" },
-      { type: "twitter", url: "#" },
-      { type: "instagram", url: "#" },
-      { type: "github", url: "#" },
-    ],
-  },
-  {
-    id: 3,
-    name: "Jane Johnson",
-    title: "Volunteer",
-    image: person,
-    socials: [
-      { type: "linkedin", url: "#" },
-      { type: "facebook", url: "#" },
-      { type: "youtube", url: "#" },
-      { type: "website", url: "#" },
-    ],
-  },
-  {
-    id: 4,
-    name: "David Lee",
-    title: "Volunteer",
-    image: person1,
-    socials: [
-      { type: "linkedin", url: "#" },
-      { type: "facebook", url: "#" },
-    ],
-  },
-  {
-    id: 5,
-    name: "Emily Davis",
-    title: "Volunteer",
-    image: person,
-    socials: [
-      { type: "linkedin", url: "#" },
-      { type: "facebook", url: "#" },
-      { type: "instagram", url: "#" },
-      { type: "website", url: "#" },
-      { type: "github", url: "#" },
-    ],
-  },
-  {
-    id: 6,
-    name: "Robert Brown",
-    title: "Volunteer",
-    image: person1,
-    socials: [
-      { type: "linkedin", url: "#" },
-      { type: "facebook", url: "#" },
-      { type: "instagram", url: "#" },
-    ],
-  },
-  {
-    id: 7,
-    name: "Sophia Wilson",
-    title: "Volunteer",
-    image: person,
-    socials: [
-      { type: "linkedin", url: "#" },
-      { type: "facebook", url: "#" },
-      { type: "youtube", url: "#" },
-    ],
-  },
-  {
-    id: 8,
-    name: "Liam Martinez",
-    title: "Volunteer",
-    image: person1,
-    socials: [
-      { type: "linkedin", url: "#" },
-      { type: "facebook", url: "#" },
-      { type: "website", url: "#" },
-    ],
-  },
-];
+
 
 export default function UCRRaceCrew() {
   const [data, setData] = useState(null);
@@ -140,13 +41,18 @@ export default function UCRRaceCrew() {
     (f) => f?.section_data?.slug === "ucr-race-crew-banner"
   );
 
+  const teamMembers = data?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "team-members"
+  );
+
+
   return (
     <>
       <InnerBanner
         title={innerBanner?.section_data?.subtitle}
         img={innerBanner?.images?.list?.[0]?.full_path}
       />
-      <TeamSection teamMembers={teamMembers } />
+      <TeamSection teamMembers={teamMembers} />
     </>
   );
 }
