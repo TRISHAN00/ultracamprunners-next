@@ -9,6 +9,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/about-us', label: 'About Us' },
   { href: '/ucr-events', label: 'Events' },
+  { href: '/ucr-race-crew', label: 'UCR Race Crew' },
   { href: '/shop', label: 'Shop' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact-us', label: 'Contact Us' },

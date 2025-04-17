@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useEffect, useState } from "react";
 import About from "./components/home/About";
 import BlogSection from "./components/home/Blogs";
@@ -11,6 +10,7 @@ import Hero from "./components/home/Hero";
 import JoinUCR from "./components/home/JoinUCR";
 import Services from "./components/home/Services";
 import StatsSection from "./components/home/Stats";
+
 
 export default function Home() {
   const [data, setData] = useState(null);
@@ -73,7 +73,6 @@ export default function Home() {
   const ourServices = data?.data?.sections?.find(
     (f) => f?.section_data?.slug === "our-services"
   );
-
 
   return (
     <>
