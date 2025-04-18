@@ -49,7 +49,7 @@ export default function EventsPage() {
         title={innerBanner?.section_data?.subtitle}
         img={innerBanner?.images?.list?.[0]?.full_path}
       />
-      <UpcomingEventList upComingEvent={upComingEvent} events={upcomingEvents} />
+      <UpcomingEventList upComingEvent={upComingEvent}  />
     </div>
   );
 }
