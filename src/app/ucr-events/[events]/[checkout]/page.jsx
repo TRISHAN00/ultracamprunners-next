@@ -50,7 +50,7 @@ export default function EventRegistration() {
       }
     }
     fetchEvents();
-  }, [slug]);
+  }, [slug, API_BASE_URL]);
 
   const price = eventsDetail?.data?.product_data?.price || 0;
   const km = eventsDetail?.data?.product_data?.km || "";
