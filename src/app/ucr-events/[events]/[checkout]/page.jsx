@@ -32,9 +32,6 @@ export default function EventRegistration() {
     cv: null,
   });
 
-
-
-
   // Fetch Event Data
   useEffect(() => {
     async function fetchEvents() {
@@ -317,7 +314,6 @@ export default function EventRegistration() {
                         onChange={handleChange}
                         placeholder={field.placeholder}
                         className="w-full border rounded p-2 focus:ring-2 focus:ring-red-500 focus:outline-none"
-                        required
                       />
                     </div>
                   )
