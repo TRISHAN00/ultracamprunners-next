@@ -2,30 +2,45 @@
 
 import { useEffect, useState } from "react";
 import EventCard from "../components/EventCard";
+import InnerBanner from "../components/InnerBanner";
 
 export default function UCREvents() {
   const [events, setEvents] = useState([]);
+  const [banner, setBanner] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
-    async function fetchEvents() {
+    async function fetchData() {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/get-req-data/all-products?image=yes&post=no&file=&specification=&gallery=&variation=&limit=`
-        );
-        const data = await response.json();
+        const [eventsRes, bannerRes] = await Promise.all([
+          fetch(
+            `${API_BASE_URL}/get-req-data/all-products?image=yes&post=no&file=&specification=&gallery=&variation=&limit=`
+          ),
+          fetch(
+            `${API_BASE_URL}/get-req-data/sections?type=slug&value=events&get_section=yes&image=yes&post=no&file=no&gallery=no`
+          ),
+        ]);
 
-        if (data.status === 200) {
-          // Filtering only 'Event' category
-          const filteredEvents = data.data.filter(
+        const eventsData = await eventsRes.json();
+        const bannerData = await bannerRes.json();
+
+        if (eventsData.status === 200) {
+          const filteredEvents = eventsData.data.filter(
             (event) => event.product_data.category_slug === "event"
           );
           setEvents(filteredEvents);
         } else {
           setError("Failed to fetch events");
+        }
+
+        if (bannerData.status === 200) {
+          const bannerSection = bannerData.data.sections.find(
+            (item) => item?.section_data?.slug === "event-banner"
+          );
+          setBanner(bannerSection);
         }
       } catch (err) {
         setError("Error fetching data");
@@ -33,7 +48,8 @@ export default function UCREvents() {
         setLoading(false);
       }
     }
-    fetchEvents();
+
+    fetchData();
   }, [API_BASE_URL]);
 
   if (loading) {
@@ -49,31 +65,30 @@ export default function UCREvents() {
   }
 
   return (
-    <section className="py-16 px-4 md:px-6 lg:px-8 pt-[120px]">
-      <div className="max-w-[1300px] mx-auto">
-        <h2 className="text-4xl text-[#C02130] md:text-5xl lg:text-[64px] font-bold md:font-black text-center mb-12">
-          Events
-        </h2>
+    <>
+      <InnerBanner
+        title={banner?.section_data?.subtitle}
+        img={banner?.images?.list?.[0]?.full_path}
+      />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.map(({ product_data, images }) => {
-            return (
+      <section className="py-32 px-4 md:px-6 lg:px-8">
+        <div className="max-w-[1300px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {events.map(({ product_data, images }) => (
               <EventCard
                 key={product_data.id}
                 title={product_data.title}
-                featureImage={
-                  images?.list?.[0]?.full_path || "/placeholder.jpg"
-                }
+                featureImage={images?.list?.[0]?.full_path || "/placeholder.jpg"}
                 organizer={product_data?.organized}
                 location={product_data?.location || "N/A"}
                 date={product_data?.date}
                 price={product_data?.price}
                 slug={product_data.slug}
               />
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
