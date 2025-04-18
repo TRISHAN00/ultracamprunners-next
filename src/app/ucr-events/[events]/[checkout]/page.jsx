@@ -32,13 +32,15 @@ export default function EventRegistration() {
     cv: null,
   });
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   // Fetch Event Data
   useEffect(() => {
     async function fetchEvents() {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://zoraithost.com/cms/api/get-req-data/product-data?type=slug&value=${slug}&image=yes&post=yes&file=yes`
+          `${API_BASE_URL}/get-req-data/product-data?type=slug&value=${slug}&image=yes&post=yes&file=yes`
         );
         const data = await response.json();
         setEventDetail(data);
@@ -57,7 +59,6 @@ export default function EventRegistration() {
   const title = eventsDetail?.data?.product_data?.title || "Event";
   const short_desc = eventsDetail?.data?.product_data?.short_desc || "";
 
-
   // Handle text input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value || "" });
@@ -72,8 +73,6 @@ export default function EventRegistration() {
   const handleFormSubmitAndPayment = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-
 
     let api_services =
       "https://zoraithost.com/cms/api/post-req-data/form-submit";
@@ -93,7 +92,7 @@ export default function EventRegistration() {
     formInputData.append("km", km);
     formInputData.append("payment", price);
     formInputData.append("file", formData.cv);
-    
+
     try {
       const response = await fetch(api_services, {
         method: "POST",

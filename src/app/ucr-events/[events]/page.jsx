@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 import { AlertTriangle, Calendar, Clock, MapPin, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,11 +13,13 @@ export default function EventPage() {
   const [eventsDetail, setEventDetail] = useState();
   const path = useParams();
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     async function fetchEvents() {
       try {
         const response = await fetch(
-          `https://zoraithost.com/cms/api/get-req-data/product-data?type=slug&value=${path.events}&image=yes&post=yes&file=yes`
+          `${API_BASE_URL}/api/get-req-data/product-data?type=slug&value=${path.events}&image=yes&post=yes&file=yes`
         );
         const data = await response.json();
         setEventDetail(data);
@@ -117,9 +119,7 @@ export default function EventPage() {
                       <Clock className="h-5 w-5 mr-3 text-[#a52931]" />
                       <div>
                         <p>Cut-off Times:</p>
-                        {parse(
-                          eventsDetail?.data?.product_data?.description
-                        )}
+                        {parse(eventsDetail?.data?.product_data?.description)}
                       </div>
                     </div>
                   )}

@@ -54,7 +54,7 @@ export default function Home() {
     (f) => f?.section_data?.slug === "explore-our-events"
   );
   const upcomingEvents = data?.data?.sections?.find(
-    (f) => f?.section_data?.slug === "our-upcoming-events"
+    (f) => f?.section_data?.slug === "our-events"
   );
   const features = data?.data?.sections?.find(
     (f) => f?.section_data?.slug === "our-features"
