@@ -1,11 +1,10 @@
 import parse from 'html-react-parser';
 import Image from "next/image";
 import { FaRunning } from "react-icons/fa";
-import Button from "../Button";
 
 export default function About({ data }) {
   return (
-    <section className="py-16 px-4 md:px-6 lg:px-8 max-w-[1300px] mx-auto">
+    <section className="py-32 px-4 md:px-6 lg:px-8 max-w-[1300px] mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
         {/* Left Column */}
         <div className="space-y-6 my-auto">
@@ -22,7 +21,6 @@ export default function About({ data }) {
             {parse(data?.section_data?.description)}
           </p>
 
-          <Button title={"Learn More"} path="/about" bgColor={"#AD242F"} />
         </div>
 
         {/* Center Column - Image */}
