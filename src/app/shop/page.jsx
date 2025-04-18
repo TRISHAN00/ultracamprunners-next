@@ -1,30 +1,46 @@
 "use client";
 import { useEffect, useState } from "react";
+import InnerBanner from "../components/InnerBanner";
 import ProductCard from "../components/shop/ProductCard";
 
 export default function Page() {
   const [products, setProducts] = useState([]);
+  const [banner, setBanner] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
-    async function fetchproducts() {
+    async function fetchData() {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/get-req-data/all-products?image=yes&post=no&file=&specification=&gallery=&variation=&limit=`
-        );
-        const data = await response.json();
+        // Parallel API calls
+        const [productRes, bannerRes] = await Promise.all([
+          fetch(
+            `${API_BASE_URL}/get-req-data/all-products?image=yes&post=no&file=&specification=&gallery=&variation=&limit=`
+          ),
+          fetch(
+            `${API_BASE_URL}/get-req-data/sections?type=slug&value=shop&get_section=yes&image=yes&post=no&file=no&gallery=no`
+          ),
+        ]);
 
-        if (data.status === 200) {
-          // Filtering only 'Event' category
-          const filteredproducts = data.data.filter(
-            (event) => event.product_data.category_slug !== "event"
+        const productsData = await productRes.json();
+        const bannerData = await bannerRes.json();
+
+        if (productsData.status === 200) {
+          const filteredProducts = productsData.data.filter(
+            (product) => product.product_data.category_slug !== "event"
           );
-          setProducts(filteredproducts);
+          setProducts(filteredProducts);
         } else {
           setError("Failed to fetch products");
+        }
+
+        if (bannerData.status === 200) {
+          const bannerSection = bannerData.data.sections.find(
+            (section) => section?.section_data?.slug === "shop-banner"
+          );
+          setBanner(bannerSection);
         }
       } catch (err) {
         setError("Error fetching data");
@@ -32,7 +48,8 @@ export default function Page() {
         setLoading(false);
       }
     }
-    fetchproducts();
+
+    fetchData();
   }, [API_BASE_URL]);
 
   if (loading) {
@@ -48,31 +65,41 @@ export default function Page() {
   }
 
   return (
-    <div className="pt-[120px] pb-[120px]">
-      <h2 className="text-4xl text-[#C02130] md:text-5xl lg:text-[64px] font-bold md:font-black text-center mb-12">
-        Products
-      </h2>
-      <div className="max-w-[1300px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
-        {products?.length > 0
-          ? products.map((product) => {
-              const thumbnail = product?.images?.list?.[0]?.full_path;
-              const { id, title, price, category_title, is_sold_out } =
-                product?.product_data;
+    <>
+      <InnerBanner
+        title={banner?.section_data?.subtitle}
+        img={banner?.images?.list?.[0]?.full_path}
+      />
 
-              return (
-                <ProductCard
-                  key={id} // Ensure each item has a unique key
-                  image={thumbnail}
-                  category={category_title}
-                  name={title}
-                  price={price}
-                  description={product.product_data.description}
-                  isSoldOut={product?.product_data?.is_sold_out === "yes"}
-                />
-              );
-            })
-          : null}
-      </div>
-    </div>
+      <section className="pt-[120px] pb-[120px]">
+
+
+        <div className="max-w-[1300px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+          {products.map((product) => {
+            const thumbnail = product?.images?.list?.[0]?.full_path;
+            const {
+              id,
+              title,
+              price,
+              category_title,
+              is_sold_out,
+              description,
+            } = product.product_data;
+
+            return (
+              <ProductCard
+                key={id}
+                image={thumbnail}
+                category={category_title}
+                name={title}
+                price={price}
+                description={description}
+                isSoldOut={is_sold_out === "yes"}
+              />
+            );
+          })}
+        </div>
+      </section>
+    </>
   );
 }

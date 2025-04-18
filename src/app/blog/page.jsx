@@ -1,28 +1,41 @@
 "use client";
 import { useEffect, useState } from "react";
 import BlogCard from "../components/BlogCard";
-
+import InnerBanner from "../components/InnerBanner";
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
+  const [banner, setBanner] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
-    async function fetchBlogs() {
+    async function fetchData() {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/get-req-data/blog-list`
-        );
-        const data = await response.json();
+        // Fetch blogs and banner in parallel
+        const [blogsRes, bannerRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/get-req-data/blog-list`),
+          fetch(
+            `${API_BASE_URL}/get-req-data/sections?type=slug&value=blog&get_section=yes&image=yes&post=no&file=no&gallery=no`
+          ),
+        ]);
 
-        if (data.status === 200) {
-          // Filtering only 'blog' category
-          setBlogs(data);
+        const blogsData = await blogsRes.json();
+        const bannerData = await bannerRes.json();
+
+        if (blogsData.status === 200) {
+          setBlogs(blogsData?.data || []);
         } else {
           setError("Failed to fetch blogs");
+        }
+
+        if (bannerData.status === 200) {
+          const bannerSection = bannerData.data.sections.find(
+            (section) => section?.section_data?.slug === "blog-banner"
+          );
+          setBanner(bannerSection);
         }
       } catch (err) {
         setError("Error fetching data");
@@ -30,7 +43,8 @@ export default function Blog() {
         setLoading(false);
       }
     }
-    fetchBlogs();
+
+    fetchData();
   }, [API_BASE_URL]);
 
   if (loading) {
@@ -41,21 +55,26 @@ export default function Blog() {
     );
   }
 
-  return (
-    <section className="py-16 px-4 md:px-6 lg:px-8 pt-[120px] ">
-      <div className="max-w-[1300px] mx-auto">
-        <h2 className="text-4xl text-[#C02130] md:text-5xl lg:text-[64px] font-bold md:font-black text-center mb-12">
-          Blog
-        </h2>
+  if (error) {
+    return <p className="text-center py-10 text-red-500">{error}</p>;
+  }
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogs?.data?.map((blog, index) => {
-            return (
-              <BlogCard key={index} blog={blog}    />
-            )
-          })}
+  return (
+    <>
+      <InnerBanner
+        title={banner?.section_data?.subtitle}
+        img={banner?.images?.list?.[0]?.full_path}
+      />
+
+      <section className="py-32 px-4 md:px-6 lg:px-8 pt-[120px]">
+        <div className="max-w-[1300px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {blogs.map((blog, index) => (
+              <BlogCard key={index} blog={blog} />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
