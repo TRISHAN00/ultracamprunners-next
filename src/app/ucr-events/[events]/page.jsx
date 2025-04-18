@@ -13,15 +13,18 @@ export default function EventPage() {
   const [eventsDetail, setEventDetail] = useState();
   const path = useParams();
 
+
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     async function fetchEvents() {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/get-req-data/product-data?type=slug&value=${path.events}&image=yes&post=yes&file=yes`
+          `${API_BASE_URL}/get-req-data/product-data?type=slug&value=${path.events}&image=yes&post=yes&file=yes`
         );
         const data = await response.json();
+
+        console.log(data)
         setEventDetail(data);
       } catch (err) {
         setError("Error fetching data");
@@ -30,10 +33,8 @@ export default function EventPage() {
       }
     }
     fetchEvents();
-  }, [path.events]);
+  }, [path.events, API_BASE_URL]);
 
-  const price = eventsDetail?.data?.product_data?.price;
-  const km = eventsDetail?.data?.product_data?.km;
   const date = eventsDetail?.data?.product_data?.date;
   const location = eventsDetail?.data?.product_data?.location;
 
@@ -57,16 +58,20 @@ export default function EventPage() {
       <main className="flex-grow pt-16">
         {/* Hero Section */}
         <div className="relative h-[60vh] w-full">
-          <Image
-            src={
-              eventsDetail?.data?.images?.list?.find((f) => f?.banner === "on")
-                ?.full_path
-            }
-            alt="Event Image"
-            fill
-            className="object-cover"
-            priority
-          />
+          {eventsDetail?.data?.images?.list?.find((f) => f?.banner === "on")
+            ?.full_path && (
+            <Image
+              src={
+                eventsDetail.data.images.list.find((f) => f?.banner === "on")
+                  ?.full_path
+              }
+              alt="Event Image"
+              fill
+              className="object-cover"
+              priority
+            />
+          )}
+
           <div className="absolute inset-0 bg-gradient-to-r from-[#a52931]/80 to-[#333a3f]/80 flex items-center">
             <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
