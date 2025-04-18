@@ -1,6 +1,6 @@
 "use client";
 
-import { BadgePercent, Calendar, MapPin, Ruler } from "lucide-react";
+import { Calendar, MapPin, Ruler, Truck } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -17,7 +17,7 @@ export default function EventRegistration() {
 
   let slug = pathname.events;
 
-  // State for form inputs
+  // State for form inputs with inside_dhaka as default
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,8 +29,15 @@ export default function EventRegistration() {
     thana: "",
     date_of_birth: "",
     tshirt_size: "",
+    delivery_location: "inside_dhaka", // Set default to inside_dhaka
     cv: null,
   });
+
+  // Delivery charge amounts
+  const DELIVERY_CHARGE = {
+    inside_dhaka: 60,
+    outside_dhaka: 120,
+  };
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -59,6 +66,10 @@ export default function EventRegistration() {
   const title = eventsDetail?.data?.product_data?.title || "Event";
   const short_desc = eventsDetail?.data?.product_data?.short_desc || "";
 
+  // Calculate delivery charge based on selected location
+  const deliveryCharge = DELIVERY_CHARGE[formData.delivery_location] || 0;
+  const totalPrice = Number(price) + deliveryCharge;
+
   // Handle text input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value || "" });
@@ -74,8 +85,7 @@ export default function EventRegistration() {
     e.preventDefault();
     setLoading(true);
 
-    let api_services =
-      "https://zoraithost.com/cms/api/post-req-data/form-submit";
+    let api_services = `${API_BASE_URL}/post-req-data/form-submit`;
 
     let formInputData = new FormData();
     formInputData.append("form_id", "career-form");
@@ -89,8 +99,9 @@ export default function EventRegistration() {
     formInputData.append("thana", formData.thana);
     formInputData.append("date_of_birth", formData.date_of_birth);
     formInputData.append("t_shirt_size", formData.tshirt_size);
+    formInputData.append("delivery_location", formData.delivery_location);
     formInputData.append("km", km);
-    formInputData.append("payment", price);
+    formInputData.append("payment", totalPrice); // Updated to include delivery charge
     formInputData.append("file", formData.cv);
 
     try {
@@ -121,8 +132,9 @@ export default function EventRegistration() {
           phone: formData.phone,
           address: formData.full_address,
           city: formData.city,
-          amount: price,
+          amount: totalPrice,
           kilometer: km,
+          delivery_location: formData.delivery_location,
         }),
       });
 
@@ -148,7 +160,7 @@ export default function EventRegistration() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center pt-[50px]  overflow-hidden">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center pt-[50px] overflow-hidden">
       {/* Header */}
       <header className="w-full bg-red-700 text-white py-6 text-center">
         <h1 className="text-3xl font-bold">{title}</h1>
@@ -179,12 +191,34 @@ export default function EventRegistration() {
                 <p>Distance: {km} KM</p>
               </div>
             )}
-            {price && (
-              <div className="flex items-center gap-3">
-                <BadgePercent className="text-red-600" />
-                <p>Price: {price} Tk</p>
+
+            {/* Price Breakdown Section */}
+            <div className="mt-6 border-t pt-4">
+              <h3 className="text-lg font-semibold mb-3">Price Breakdown</h3>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span>Event Registration</span>
+                  <span>{price} Tk</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Truck className="text-red-600 h-4 w-4" />
+                    <span>
+                      Delivery Charge (
+                      {formData.delivery_location === "inside_dhaka"
+                        ? "Inside Dhaka"
+                        : "Outside Dhaka"}
+                      )
+                    </span>
+                  </div>
+                  <span>{deliveryCharge} Tk</span>
+                </div>
+                <div className="border-t pt-2 mt-2 flex justify-between items-center font-semibold">
+                  <span>Total Amount</span>
+                  <span>{totalPrice} Tk</span>
+                </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
 
@@ -393,12 +427,43 @@ export default function EventRegistration() {
                   <input
                     type="text"
                     name="payment"
-                    value={`${price} TK`}
+                    value={`${totalPrice} TK`}
                     readOnly
                     className="w-full border rounded p-2 bg-gray-100"
                   />
                 </div>
               )}
+
+              {/* Delivery Location Field */}
+              <div className="md:col-span-2">
+                <label className="text-gray-600 font-medium mb-2 block">
+                  Delivery Location
+                </label>
+                <div className="flex flex-wrap gap-4">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="delivery_location"
+                      value="inside_dhaka"
+                      checked={formData.delivery_location === "inside_dhaka"}
+                      onChange={handleChange}
+                      className="mr-2"
+                    />
+                    <span className="text-gray-700">Inside of Dhaka (60 Tk)</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="delivery_location"
+                      value="outside_dhaka"
+                      checked={formData.delivery_location === "outside_dhaka"}
+                      onChange={handleChange}
+                      className="mr-2"
+                    />
+                    <span className="text-gray-700">Outside of Dhaka (120 Tk)</span>
+                  </label>
+                </div>
+              </div>
             </div>
 
             {/* Submit Button */}
@@ -406,7 +471,7 @@ export default function EventRegistration() {
               type="submit"
               className="w-full bg-red-700 text-white py-3 rounded-lg text-lg font-semibold hover:bg-red-800 transition"
             >
-              {loading ? "Processing..." : "Register & Pay"}
+              {loading ? "Processing..." : `Register & Pay (${totalPrice} Tk)`}
             </button>
           </form>
         </div>
