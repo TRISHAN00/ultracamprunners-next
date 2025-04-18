@@ -114,11 +114,9 @@ export default function EventRegistration() {
         throw new Error("Failed to submit form");
       }
 
-      alert("Form submitted successfully!");
       reset();
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("Form submission failed: " + error.message);
     }
 
     // Payment Processing
