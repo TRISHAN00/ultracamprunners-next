@@ -39,6 +39,10 @@ export default function EventsPage() {
     (f) => f?.section_data?.slug === "upcoming-inner-banner"
   );
 
+  const upComingEvent = data?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "upcoming-event-list"
+  )
+
   // Sample data - in a real application, this would come from an API or CMS
   const upcomingEvents = [
     {
@@ -109,14 +113,13 @@ export default function EventsPage() {
     },
   ];
 
-
   return (
     <div>
       <InnerBanner
         title={innerBanner?.section_data?.subtitle}
         img={innerBanner?.images?.list?.[0]?.full_path}
       />
-      <UpcomingEventList events={upcomingEvents} />
+      <UpcomingEventList upComingEvent={upComingEvent} events={upcomingEvents} />
     </div>
   );
 }
