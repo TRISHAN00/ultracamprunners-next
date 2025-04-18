@@ -4,7 +4,8 @@ import Image from "next/image";
 
 const InnerBanner = ({ img, text, title }) => {
   return (
-    <section className="relative w-full h-[60vw] sm:h-[50vw] md:h-[40vw] lg:h-[40vw] xl:h-[30vw] bg-gray-300 overflow-hidden">
+    <section className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[500px] xl:h-[500px] bg-gray-300 overflow-hidden">
+
       {/* Responsive background image */}
       <Image
         src={img}
