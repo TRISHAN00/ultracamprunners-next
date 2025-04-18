@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaCalendarAlt, FaFacebook, FaMapMarkerAlt, FaUser } from 'react-icons/fa';
+import { FaCalendarAlt, FaFacebook, FaMapMarkerAlt, FaRoute, FaUser } from 'react-icons/fa';
 
 const UpcomingEventListCard = ({ event }) => {
   return (
@@ -36,6 +36,12 @@ const UpcomingEventListCard = ({ event }) => {
           <div className="flex items-center text-gray-600">
             <FaMapMarkerAlt className="mr-2 text-indigo-600" />
             <span>{event.location}</span>
+          </div>
+          
+          {/* Distance - New Field */}
+          <div className="flex items-center text-gray-600">
+            <FaRoute className="mr-2 text-indigo-600" />
+            <span>{event.distance}</span>
           </div>
         </div>
         
