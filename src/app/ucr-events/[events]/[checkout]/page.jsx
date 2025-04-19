@@ -86,8 +86,6 @@ export default function EventRegistration() {
   // Current age calculate
   const currentAge = calculateAge(formData.date_of_birth);
 
-  console.log(currentAge);
-
   // Handle text input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value || "" });
