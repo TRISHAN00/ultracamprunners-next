@@ -71,22 +71,20 @@ export default function UCREvents() {
         img={banner?.images?.list?.[0]?.full_path}
       />
 
-      <section className="py-32 px-4 md:px-6 lg:px-8">
-        <div className="max-w-[1300px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.map(({ product_data, images }) => (
-              <EventCard
-                key={product_data.id}
-                title={product_data.title}
-                featureImage={images?.list?.[0]?.full_path || "/placeholder.jpg"}
-                organizer={product_data?.organized}
-                location={product_data?.location || "N/A"}
-                date={product_data?.date}
-                price={product_data?.price}
-                slug={product_data.slug}
-              />
-            ))}
-          </div>
+      <section className="py-32  md:px-6 lg:px-8 max-w-[1300px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events.map(({ product_data, images }) => (
+            <EventCard
+              key={product_data.id}
+              title={product_data.title}
+              featureImage={images?.list?.[0]?.full_path || "/placeholder.jpg"}
+              organizer={product_data?.organized}
+              location={product_data?.location || "N/A"}
+              date={product_data?.date}
+              price={product_data?.price}
+              slug={product_data.slug}
+            />
+          ))}
         </div>
       </section>
     </>

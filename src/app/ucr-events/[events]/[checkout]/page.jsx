@@ -39,6 +39,19 @@ export default function EventRegistration() {
     outside_dhaka: 120,
   };
 
+  function calculateAge(dobString) {
+    const today = new Date();
+    const dob = new Date(dobString);
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+
+    return age;
+  }
+
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // Fetch Event Data
@@ -69,6 +82,11 @@ export default function EventRegistration() {
   // Calculate delivery charge based on selected location
   const deliveryCharge = DELIVERY_CHARGE[formData.delivery_location] || 0;
   const totalPrice = Number(price) + deliveryCharge;
+
+  // Current age calculate
+  const currentAge = calculateAge(formData.date_of_birth);
+
+  console.log(currentAge);
 
   // Handle text input change
   const handleChange = (e) => {
@@ -323,7 +341,7 @@ export default function EventRegistration() {
                   placeholder: "Select your birth date",
                   isVisible:
                     eventsDetail?.data?.product_data?.is_date_of_birth_field ===
-                    "yes"
+                    "yes" 
                       ? true
                       : false,
                 },
@@ -381,7 +399,7 @@ export default function EventRegistration() {
 
               {/* NID Upload */}
               {eventsDetail?.data?.product_data?.is_cv_upload_field ===
-              "yes" ? (
+              "yes" || currentAge >= 50 ? (
                 <div className="flex flex-col">
                   <label htmlFor="nid" className="text-gray-600 font-medium">
                     Upload NID
@@ -447,7 +465,9 @@ export default function EventRegistration() {
                       onChange={handleChange}
                       className="mr-2"
                     />
-                    <span className="text-gray-700">Inside of Dhaka (60 Tk)</span>
+                    <span className="text-gray-700">
+                      Inside of Dhaka (60 Tk)
+                    </span>
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
@@ -458,7 +478,9 @@ export default function EventRegistration() {
                       onChange={handleChange}
                       className="mr-2"
                     />
-                    <span className="text-gray-700">Outside of Dhaka (120 Tk)</span>
+                    <span className="text-gray-700">
+                      Outside of Dhaka (120 Tk)
+                    </span>
                   </label>
                 </div>
               </div>
