@@ -17,7 +17,7 @@ export default function EventRegistration() {
 
   let slug = pathname.events;
 
-  // State for form inputs with inside_dhaka as default
+  // State for form inputs with delivery_location as default
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,17 +29,21 @@ export default function EventRegistration() {
     thana: "",
     date_of_birth: "",
     tshirt_size: "",
-    delivery_location: "inside_dhaka", // Set default to inside_dhaka
+    delivery_location: "",
+    kit_collection: "",
     cv: null,
   });
 
   // Delivery charge amounts
   const DELIVERY_CHARGE = {
+    without_tShirt: 0,
     inside_dhaka: 60,
     outside_dhaka: 120,
   };
 
   function calculateAge(dobString) {
+    if (!dobString) return 0;
+
     const today = new Date();
     const dob = new Date(dobString);
     let age = today.getFullYear() - dob.getFullYear();
@@ -67,6 +71,7 @@ export default function EventRegistration() {
         setLoading(false);
       } catch (err) {
         setError("Error fetching data");
+        setLoading(false);
       }
     }
     fetchEvents();
@@ -103,6 +108,13 @@ export default function EventRegistration() {
 
     let api_services = `${API_BASE_URL}/post-req-data/form-submit`;
 
+    // Check if T-shirt size is selected when "with_tshirt" is selected
+    if (formData.kit_collection === "with_tshirt" && !formData.tshirt_size) {
+      alert("Please select a T-shirt size");
+      setLoading(false);
+      return;
+    }
+
     let formInputData = new FormData();
     formInputData.append("form_id", "career-form");
     formInputData.append("name", formData.name);
@@ -116,8 +128,9 @@ export default function EventRegistration() {
     formInputData.append("date_of_birth", formData.date_of_birth);
     formInputData.append("t_shirt_size", formData.tshirt_size);
     formInputData.append("delivery_location", formData.delivery_location);
+    formInputData.append("kit_collection", formData.kit_collection);
     formInputData.append("km", km);
-    formInputData.append("payment", totalPrice); // Updated to include delivery charge
+    formInputData.append("payment", totalPrice);
     formInputData.append("file", formData.cv);
 
     try {
@@ -130,36 +143,39 @@ export default function EventRegistration() {
         throw new Error("Failed to submit form");
       }
 
+      // Payment Processing
+      try {
+        const res = await fetch("/api/payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.full_address,
+            city: formData.city,
+            amount: totalPrice,
+            kilometer: km,
+            delivery_location: formData.delivery_location,
+            kit_collection: formData.kit_collection,
+          }),
+        });
+
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert("Payment initiation failed!");
+        }
+      } catch (error) {
+        console.error("Payment Error:", error);
+        alert("Payment processing error. Please try again.");
+      }
+
       reset();
     } catch (error) {
       console.error("Error submitting form:", error);
-    }
-
-    // Payment Processing
-    try {
-      const res = await fetch("/api/payment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          address: formData.full_address,
-          city: formData.city,
-          amount: totalPrice,
-          kilometer: km,
-          delivery_location: formData.delivery_location,
-        }),
-      });
-
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert("Payment initiation failed!");
-      }
-    } catch (error) {
-      console.error("Payment Error:", error);
+      alert("Error submitting form. Please try again.");
     }
 
     setLoading(false);
@@ -218,11 +234,11 @@ export default function EventRegistration() {
                   <div className="flex items-center gap-2">
                     <Truck className="text-red-600 h-4 w-4" />
                     <span>
-                      Delivery Charge (
-                      {formData.delivery_location === "inside_dhaka"
-                        ? "Inside Dhaka"
-                        : "Outside Dhaka"}
-                      )
+                      {formData.delivery_location === "without_tShirt"
+                        ? "Without T-Shirt"
+                        : formData.delivery_location === "inside_dhaka"
+                        ? "Delivery (Inside Dhaka)"
+                        : "Delivery (Outside Dhaka)"}
                     </span>
                   </div>
                   <span>{deliveryCharge} Tk</span>
@@ -238,10 +254,7 @@ export default function EventRegistration() {
 
         {/* Registration Form */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <form
-            onSubmit={handleFormSubmitAndPayment}
-            className="space-y-6 bg-white p-6 rounded-lg shadow-md"
-          >
+          <form onSubmit={handleFormSubmitAndPayment} className="space-y-6">
             <h2 className="text-xl font-semibold mb-4 text-gray-700">
               Registration Details
             </h2>
@@ -339,7 +352,7 @@ export default function EventRegistration() {
                   placeholder: "Select your birth date",
                   isVisible:
                     eventsDetail?.data?.product_data?.is_date_of_birth_field ===
-                    "yes" 
+                    "yes"
                       ? true
                       : false,
                 },
@@ -361,14 +374,36 @@ export default function EventRegistration() {
                         onChange={handleChange}
                         placeholder={field.placeholder}
                         className="w-full border rounded p-2 focus:ring-2 focus:ring-red-500 focus:outline-none"
+                        required={field.isVisible}
                       />
                     </div>
                   )
               )}
 
+              {/* Kit Collection */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="kit_collection"
+                  className="text-gray-600 font-medium"
+                >
+                  Kit Collection
+                </label>
+                <select
+                  id="kit_collection"
+                  name="kit_collection"
+                  value={formData.kit_collection}
+                  onChange={handleChange}
+                  className="w-full border rounded p-2 focus:ring-2 focus:ring-red-500 focus:outline-none"
+                  required
+                >
+                  <option value="">Select an Option</option>
+                  <option value="with_tshirt">With T-Shirt</option>
+                  <option value="without_tshirt">Without T-Shirt</option>
+                </select>
+              </div>
+
               {/* T-Shirt Size Dropdown */}
-              {eventsDetail?.data?.product_data?.is_tshirt_size_field ===
-                "yes" && (
+              {formData.kit_collection === "with_tshirt" && (
                 <div className="flex flex-col">
                   <label
                     htmlFor="tshirt_size"
@@ -382,6 +417,7 @@ export default function EventRegistration() {
                     value={formData.tshirt_size}
                     onChange={handleChange}
                     className="w-full border rounded p-2 focus:ring-2 focus:ring-red-500 focus:outline-none"
+                    required={formData.kit_collection === "with_tshirt"}
                   >
                     <option value="">Select Size</option>
                     <option value="S">S</option>
@@ -396,22 +432,25 @@ export default function EventRegistration() {
               )}
 
               {/* NID Upload */}
-              {eventsDetail?.data?.product_data?.is_cv_upload_field ===
-              "yes" || currentAge >= 50 ? (
+              {(eventsDetail?.data?.product_data?.is_cv_upload_field ===
+                "yes" ||
+                currentAge >= 50) && (
                 <div className="flex flex-col">
-                  <label htmlFor="nid" className="text-gray-600 font-medium">
+                  <label htmlFor="cv" className="text-gray-600 font-medium">
                     Upload NID
                   </label>
                   <input
-                    id="nid"
+                    id="cv"
                     type="file"
-                    name="nid"
+                    name="cv"
                     onChange={handleFileChange}
                     className="w-full border rounded p-2 bg-white focus:ring-2 focus:ring-red-500 focus:outline-none"
+                    required={
+                      eventsDetail?.data?.product_data?.is_cv_upload_field ===
+                        "yes" || currentAge >= 50
+                    }
                   />
                 </div>
-              ) : (
-                ""
               )}
 
               {/* Read-Only Fields */}
@@ -449,45 +488,48 @@ export default function EventRegistration() {
               )}
 
               {/* Delivery Location Field */}
-              <div className="md:col-span-2">
-                <label className="text-gray-600 font-medium mb-2 block">
-                  Delivery Location
-                </label>
-                <div className="flex flex-wrap gap-4">
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="delivery_location"
-                      value="inside_dhaka"
-                      checked={formData.delivery_location === "inside_dhaka"}
-                      onChange={handleChange}
-                      className="mr-2"
-                    />
-                    <span className="text-gray-700">
-                      Inside of Dhaka (60 Tk)
-                    </span>
+              {formData.kit_collection === "with_tshirt" && (
+                <div className="md:col-span-2">
+                  <label className="text-gray-600 font-medium mb-2 block">
+                    Delivery Location
                   </label>
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="delivery_location"
-                      value="outside_dhaka"
-                      checked={formData.delivery_location === "outside_dhaka"}
-                      onChange={handleChange}
-                      className="mr-2"
-                    />
-                    <span className="text-gray-700">
-                      Outside of Dhaka (120 Tk)
-                    </span>
-                  </label>
+                  <div className="flex flex-wrap gap-4">
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="delivery_location"
+                        value="inside_dhaka"
+                        checked={formData.delivery_location === "inside_dhaka"}
+                        onChange={handleChange}
+                        className="mr-2"
+                      />
+                      <span className="text-gray-700">
+                        Inside of Dhaka (60 Tk)
+                      </span>
+                    </label>
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="delivery_location"
+                        value="outside_dhaka"
+                        checked={formData.delivery_location === "outside_dhaka"}
+                        onChange={handleChange}
+                        className="mr-2"
+                      />
+                      <span className="text-gray-700">
+                        Outside of Dhaka (120 Tk)
+                      </span>
+                    </label>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-red-700 text-white py-3 rounded-lg text-lg font-semibold hover:bg-red-800 transition"
+              disabled={loading}
             >
               {loading ? "Processing..." : `Register & Pay (${totalPrice} Tk)`}
             </button>
