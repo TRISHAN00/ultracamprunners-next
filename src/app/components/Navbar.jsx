@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import logo from '../../app/assets/logo.png';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -26,7 +27,7 @@ export default function Navbar() {
           <div className="flex items-center gap-8">
             <Link href="/" className="text-2xl font-bold text-[#a52931]">
               <Image
-                src='https://ultracamprunners.com/wp-content/uploads/2024/09/1704712437.png'
+                src={logo}
                 alt="ucr-logo"
                 width={150}
                 height={150}

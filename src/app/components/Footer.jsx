@@ -2,6 +2,8 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaFacebook, FaLinkedin, FaWhatsapp, FaYoutube } from "react-icons/fa";
+import logo from "../../app/assets/logo.png";
+import paymentGateway from "../../app/assets/payment-gateway.png";
 
 export default function Footer() {
   return (
@@ -10,13 +12,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 text-center md:text-left">
           {/* Company Info */}
           <div className="space-y-4 ">
-            <Image
-              src="https://ultracamprunners.com/wp-content/uploads/2024/09/1704712437.png"
-              alt="Ultra Camp Runners Logo"
-              width={150}
-              height={50}
-              className="h-12 w-auto mx-auto md:mx-0"
-            />
+            <Link href={"/"}>
+              <Image
+                src={logo}
+                alt="Ultra Camp Runners Logo"
+                width={150}
+                height={50}
+                className="h-12 w-auto mx-auto md:mx-0"
+              />
+            </Link>
             <p className="text-muted-foreground max-w-sm mx-auto md:mx-0">
               Established in 2019, Ultra Camp Runners is Dhaka&apos;s premier
               marathon organizer, hosting 8 successful events. We foster a
@@ -157,7 +161,7 @@ export default function Footer() {
           </div>
           <div>
             <Image
-              src="https://ultracamprunners.com/wp-content/uploads/2024/09/ssl-1024x33.jpg"
+              src={paymentGateway}
               alt="payment-methods"
               height={33}
               width={1024}
