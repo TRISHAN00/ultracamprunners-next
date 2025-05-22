@@ -65,7 +65,7 @@ export default function Blog() {
         title={banner?.section_data?.subtitle}
         img={banner?.images?.list?.[0]?.full_path}
       />
-
+Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nostrum eius voluptatum culpa dolor veritatis officia quam ratione quos ipsam. Non laudantium officia incidunt quod doloremque minus deleniti possimus officiis atque!
       <section className="py-32 px-4 md:px-6 lg:px-8 pt-[120px]">
         <div className="max-w-[1300px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
