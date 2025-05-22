@@ -9,7 +9,7 @@ export async function POST(req) {
     const { name, phone, address, city, amount, eventprice, kilometer } = body;
 
     // Ensure required fields are present
-    if (!name || !phone || !address || !city || !amount  || !kilometer) {
+    if (!name || !phone || !address || !city || !amount || !kilometer) {
       return NextResponse.json({
         status: "FAILED",
         message: "All fields are required.",
@@ -21,15 +21,21 @@ export async function POST(req) {
 
     const formData = new FormData();
     formData.append("store_id", process.env.SSLCOMMERZ_STORE_ID);
-    formData.append("store_passwd", process.env.SSLCOMMERZ_STORE_PASSWORD);    
+    formData.append("store_passwd", process.env.SSLCOMMERZ_STORE_PASSWORD);
     formData.append("kilometer", kilometer);
     formData.append("total_amount", parseFloat(amount));
     formData.append("currency", "BDT");
     formData.append("tran_id", tran_id);
-    formData.append("success_url", `${process.env.NEXT_PUBLIC_BASE_URL}/api/success?id=${tran_id}`);
-    formData.append("fail_url", `${process.env.NEXT_PUBLIC_BASE_URL}/api/fail?id=${tran_id}`);
-    formData.append("cancel_url", `${process.env.NEXT_PUBLIC_BASE_URL}/api/cancel?id=${tran_id}`);
-    formData.append("ipn_url", `${process.env.NEXT_PUBLIC_BASE_URL}/api/ipn?id=${tran_id}`);
+
+    const host = req.headers.get("host");
+    const protocol = host.includes("localhost") ? "http" : "https";
+    const baseUrl = `${protocol}://${host}`;
+
+    // Set callback URLs using the detected domain
+    formData.append("success_url", `${baseUrl}/api/success`);
+    formData.append("fail_url", `${baseUrl}/api/fail`);
+    formData.append("cancel_url", `${baseUrl}/api/cancel`);
+    formData.append("ipn_url", `${baseUrl}/api/ipn`);
 
     // Customer Info (Ensure `email` is always present)
     formData.append("cus_name", name);

@@ -23,10 +23,10 @@ export default function UpcomingEvents({ title }) {
           );
           setEvents(filteredEvents);
         } else {
-          setError("Failed to fetch events");
+          console.log('Failed to fetch events')
         }
       } catch (err) {
-        setError("Error fetching data");
+        console.log(err)
       } 
     }
     fetchEvents();

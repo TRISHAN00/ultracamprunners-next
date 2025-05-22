@@ -15,11 +15,11 @@ export default function About({ data }) {
             </div>
 
             <h2 className="text-3xl md:text-4xl font-bold text-[#AD242F]">
-              {parse(data?.section_data?.short_desc)}
+              {parse(data?.section_data?.short_desc || "")}
             </h2>
 
             <p className="text-muted-foreground">
-              {parse(data?.section_data?.description)}
+              {parse(data?.section_data?.description || "")}
             </p>
           </div>
 

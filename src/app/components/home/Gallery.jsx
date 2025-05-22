@@ -24,7 +24,7 @@ export default function GallerySection({data}) {
 
       <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 3, 1024: 5 }}>
         <Masonry gutter="16px">
-          {images.map((src, index) => (
+          {images?.map((src, index) => (
             <Image
               key={index}
               src={src?.full_path}

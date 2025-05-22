@@ -74,6 +74,8 @@ export default function Home() {
     (f) => f?.section_data?.slug === "our-services"
   );
 
+  console.log(hero)
+
   return (
     <>
       <Hero data={hero} />
