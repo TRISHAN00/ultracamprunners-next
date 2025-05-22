@@ -46,6 +46,8 @@ export default function Hero({ data }) {
         </div>
       )}
 
+      Hello World
+
       {/* Overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-[#AD242F]/80" />
 
