@@ -10,7 +10,6 @@ import {
   FaWhatsapp,
   FaYoutube,
 } from "react-icons/fa";
-import bgHero from '../../assets/explore-ouro-events.jpg';
 import Button from "../Button";
 
 export default function Hero({ data }) {
@@ -29,15 +28,14 @@ export default function Hero({ data }) {
     fetchData();
   }, [API_BASE_URL]);
 
-  console.log(data)
 
   return (
     <div className="relative h-[100vh] w-full flex items-center justify-center overflow-hidden">
       {/* Background Image */}
-      {data?.posts?.list[0]?.data?.short_desc && (
+      {data?.images?.list?.[0]?.full_path && (
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
           <Image
-            src={bgHero}
+            src={data?.images?.list?.[0]?.full_path}
             alt="Hero Background"
             layout="fill"
             objectFit="cover"
@@ -46,7 +44,6 @@ export default function Hero({ data }) {
         </div>
       )}
 
-      Hello World
 
       {/* Overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-[#AD242F]/80" />

@@ -19,15 +19,16 @@ export default function UpcomingEvents({ title }) {
         if (data.status === 200) {
           // Filtering only 'Event' category
           const filteredEvents = data?.data?.filter(
-            (event) => event.product_data.category_slug === "event"
+            (event) => event.product_data.category_slug === "events"
           );
+
           setEvents(filteredEvents);
         } else {
-          console.log('Failed to fetch events')
+          console.log("Failed to fetch events");
         }
       } catch (err) {
-        console.log(err)
-      } 
+        console.log(err);
+      }
     }
     fetchEvents();
   }, [API_BASE_URL]);

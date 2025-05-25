@@ -10,6 +10,7 @@ export default function UCREvents() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function UCREvents() {
 
         if (eventsData.status === 200) {
           const filteredEvents = eventsData.data.filter(
-            (event) => event.product_data.category_slug === "event"
+            (event) => event.product_data.category_slug === "events"
           );
           setEvents(filteredEvents);
         } else {
@@ -73,7 +74,7 @@ export default function UCREvents() {
 
       <section className="py-32  md:px-6 lg:px-8 max-w-[1300px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.map(({ product_data, images }) => (
+          {events?.map(({ product_data, images }) => (
             <EventCard
               key={product_data.id}
               title={product_data.title}

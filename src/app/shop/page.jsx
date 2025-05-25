@@ -29,7 +29,7 @@ export default function Page() {
 
         if (productsData.status === 200) {
           const filteredProducts = productsData.data.filter(
-            (product) => product.product_data.category_slug !== "event"
+            (product) => product.product_data.category_slug !== "events"
           );
           setProducts(filteredProducts);
         } else {

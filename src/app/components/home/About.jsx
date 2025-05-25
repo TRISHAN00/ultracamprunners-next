@@ -9,10 +9,11 @@ export default function About({ data }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left Column */}
           <div className="space-y-6 my-auto">
-            <div className="flex items-center gap-2 text-lg">
+            {data?.section_data?.subtitle &&   <div className="flex items-center gap-2 text-lg">
               <FaRunning color={"#AD242F"} />
-              <span className="font-medium tracking-[3px]">About Us</span>
-            </div>
+              <span className="font-medium tracking-[3px]">{data?.section_data?.subtitle}</span>
+            </div>}
+          
 
             <h2 className="text-3xl md:text-4xl font-bold text-[#AD242F]">
               {parse(data?.section_data?.short_desc || "")}

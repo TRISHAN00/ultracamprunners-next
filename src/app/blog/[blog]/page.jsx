@@ -33,7 +33,7 @@ export default function BlogDetails() {
     fetchblogs();
   }, [API_BASE_URL, path.blog]);
 
-  const title = blogDetail?.data?.data?.title;
+  const title = blogDetail?.data?.data?.subtitle;
   const body = blogDetail?.data?.data?.body;
   const banner = blogDetail?.data?.images?.list?.[0]?.full_path;
   const rawDate = blogDetail?.data?.data?.date; // Assuming this is in "YYYY-MM-DD" format
@@ -91,7 +91,7 @@ export default function BlogDetails() {
 
         {/* Blog Content */}
         <div className="mt-6 text-gray-700 space-y-5">
-          {parse(body)}
+          {parse(body || "")}
         </div>
 
       

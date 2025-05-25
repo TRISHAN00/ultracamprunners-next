@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import About from "./components/home/About";
 import BlogSection from "./components/home/Blogs";
@@ -10,7 +10,6 @@ import Hero from "./components/home/Hero";
 import JoinUCR from "./components/home/JoinUCR";
 import Services from "./components/home/Services";
 import StatsSection from "./components/home/Stats";
-
 
 export default function Home() {
   const [data, setData] = useState(null);
@@ -47,6 +46,7 @@ export default function Home() {
   const hero = data?.data?.sections?.find(
     (f) => f?.section_data?.slug === "hero"
   );
+
   const aboutUs = data?.data?.sections?.find(
     (f) => f?.section_data?.slug === "about-us"
   );
@@ -66,6 +66,10 @@ export default function Home() {
     (f) => f?.section_data?.slug === "our-gallery"
   );
 
+  const blogs = data?.data?.sections?.find(
+    (f) => f?.section_data?.slug === "blogs"
+  );
+
   const counter = data?.data?.sections?.find(
     (f) => f?.section_data?.slug === "counter"
   );
@@ -73,8 +77,6 @@ export default function Home() {
   const ourServices = data?.data?.sections?.find(
     (f) => f?.section_data?.slug === "our-services"
   );
-
-  console.log(hero)
 
   return (
     <>
@@ -85,7 +87,7 @@ export default function Home() {
       <Features data={features} />
       <JoinUCR data={joinUs} />
       <GallerySection data={gallery} />
-      <BlogSection />
+      <BlogSection data={blogs} />
       <StatsSection data={counter} />
       <Services data={ourServices} />
     </>

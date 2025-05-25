@@ -55,7 +55,7 @@ export default function Features({ data }) {
                     <h3 className="text-3xl font-bold text-white">
                       {feature?.data?.title}
                     </h3>
-                    <p className="text-gray-200">{feature?.data?.short_desc}</p>
+                    <p className="text-gray-200">{feature?.data?.description}</p>
                   </div>
                 </div>
               </div>
