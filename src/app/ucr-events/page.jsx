@@ -10,7 +10,6 @@ export default function UCREvents() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
@@ -21,7 +20,7 @@ export default function UCREvents() {
             `${API_BASE_URL}/get-req-data/all-products?image=yes&post=no&file=&specification=&gallery=&variation=&limit=`
           ),
           fetch(
-            `${API_BASE_URL}/get-req-data/sections?type=slug&value=events&get_section=yes&image=yes&post=no&file=no&gallery=no`
+            `${API_BASE_URL}/get-req-data/sections?type=slug&value=ucr-events&get_section=yes&image=yes&post=no&file=no&gallery=no`
           ),
         ]);
 

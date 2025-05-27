@@ -24,7 +24,6 @@ export default function EventPage() {
         );
         const data = await response.json();
 
-        console.log(data)
         setEventDetail(data);
       } catch (err) {
         setError("Error fetching data");
