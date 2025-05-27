@@ -4,7 +4,6 @@ import Button from '../Button';
 
 
 export default function JoinInfo({data}) {
-  console.log(data)
   return (
     <section className="bg-[#AD242F] relative overflow-hidden">
       <div className="max-w-[1300px] mx-auto px-4 py-16 md:py-24 md:px-6 lg:px-8">
@@ -14,7 +13,7 @@ export default function JoinInfo({data}) {
             <p className="text-lg font-medium opacity-90">{data?.section_data?.subtitle}</p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">{data?.section_data?.title}</h1>
             <p className="text-lg opacity-90 max-w-xl">
-              {parse(data?.section_data?.description)}
+              {parse(data?.section_data?.description || "")}
             
             </p>
             <Button title={'Join Now'} path={data?.section_data?.search_slug} />

@@ -116,7 +116,7 @@ export default function EventRegistration() {
     }
 
     let formInputData = new FormData();
-    formInputData.append("form_id", "career-form");
+    formInputData.append("form_id", "event-form");
     formInputData.append("name", formData.name);
     formInputData.append("email", formData.email);
     formInputData.append("phone", formData.phone);

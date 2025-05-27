@@ -14,33 +14,24 @@ export default function Page() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Parallel API calls
-        const [productRes, bannerRes] = await Promise.all([
-          fetch(
-            `${API_BASE_URL}/get-req-data/all-products?image=yes&post=no&file=&specification=&gallery=&variation=&limit=`
-          ),
-          fetch(
-            `${API_BASE_URL}/get-req-data/sections?type=slug&value=shop&get_section=yes&image=yes&post=no&file=no&gallery=no`
-          ),
-        ]);
+        const res = await fetch(
+          `${API_BASE_URL}/get-req-data/sections?type=slug&value=shop&get_section=yes&image=yes&post=yes&file=no&gallery=no`
+        );
+        const data = await res.json();
 
-        const productsData = await productRes.json();
-        const bannerData = await bannerRes.json();
-
-        if (productsData.status === 200) {
-          const filteredProducts = productsData.data.filter(
-            (product) => product.product_data.category_slug !== "events"
-          );
-          setProducts(filteredProducts);
-        } else {
-          setError("Failed to fetch products");
-        }
-
-        if (bannerData.status === 200) {
-          const bannerSection = bannerData.data.sections.find(
+        if (data.status === 200) {
+          const bannerSection = data.data.sections.find(
             (section) => section?.section_data?.slug === "shop-banner"
           );
+
+          const productSections = data.data.sections.find(
+            (section) => section?.section_data?.slug === "t-shirts"
+          );
+
           setBanner(bannerSection);
+          setProducts(productSections?.posts?.list);
+        } else {
+          setError("Failed to fetch data");
         }
       } catch (err) {
         setError("Error fetching data");
@@ -51,6 +42,8 @@ export default function Page() {
 
     fetchData();
   }, [API_BASE_URL]);
+
+  console.log(products);
 
   if (loading) {
     return (
@@ -66,38 +59,31 @@ export default function Page() {
 
   return (
     <>
-      <InnerBanner
-        title={banner?.section_data?.subtitle}
-        img={banner?.images?.list?.[0]?.full_path}
-      />
+      {banner && (
+        <InnerBanner
+          title={banner?.section_data?.subtitle}
+          img={banner?.images?.list?.[0]?.full_path}
+        />
+      )}
 
       <section className="pt-[120px] pb-[120px]">
-
-
         <div className="max-w-[1300px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
-          {products.map((product) => {
-            const thumbnail = product?.images?.list?.[0]?.full_path;
-            const {
-              id,
-              title,
-              price,
-              category_title,
-              is_sold_out,
-              description,
-            } = product.product_data;
-
-            return (
-              <ProductCard
-                key={id}
-                image={thumbnail}
-                category={category_title}
-                name={title}
-                price={price}
-                description={description}
-                isSoldOut={is_sold_out === "yes"}
-              />
-            );
-          })}
+          {products.length > 0 ? (
+            products.map((item, index) => {
+              console.log(item?.images?.[0]?.full_path);
+              return (
+                <ProductCard
+                  key={index}
+                  image={item?.images?.[0]?.full_path}
+                  name={item?.data?.title || "Title"}
+                  price={item?.data?.price || "0"}
+                  description={item?.data?.short_description || ""}
+                />
+              );
+            })
+          ) : (
+            <p className="text-center col-span-full">No products found.</p>
+          )}
         </div>
       </section>
     </>
