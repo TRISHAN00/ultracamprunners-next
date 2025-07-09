@@ -6,240 +6,21 @@ import {
   CheckCircle,
   MapPin,
   Ruler,
-  Truck,
 } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import EventForm from "../../../components/event/EventForm";
 
 export default function EventRegistration() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [eventsDetail, setEventDetail] = useState(null);
-  const [paymentStatus, setPaymentStatus] = useState(null);
-  const [validationErrors, setValidationErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const pathname = useParams();
-  const { reset } = useForm({ mode: "all" });
+  const searchParams = useSearchParams();
+  const priceParam = searchParams.get("price");
 
   let slug = pathname.events;
-
-  // State for form inputs
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    full_address: "",
-    country: "",
-    city: "",
-    district: "",
-    thana: "",
-    date_of_birth: "",
-    tshirt_size: "",
-    delivery_location: "",
-    kit_collection: "",
-    cv: null,
-  });
-
-  // Delivery charge amounts
-  const DELIVERY_CHARGE = {
-    without_tShirt: 0,
-    inside_dhaka: 60,
-    outside_dhaka: 120,
-  };
-
-  // Validation rules
-  const validationRules = {
-    name: {
-      required: true,
-      minLength: 2,
-      pattern: /^[a-zA-Z\s.'-]+$/,
-      message: "Name must contain only letters, spaces, and common punctuation",
-    },
-    email: {
-      required: true,
-      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      message: "Please enter a valid email address",
-    },
-    phone: {
-      required: true,
-      pattern: /^(\+88)?01[3-9]\d{8}$/,
-      message:
-        "Please enter a valid Bangladeshi phone number (e.g., 01XXXXXXXXX)",
-    },
-    full_address: {
-      required: true,
-      minLength: 10,
-      message: "Please enter a complete address (minimum 10 characters)",
-    },
-    country: {
-      required: true,
-      minLength: 2,
-      message: "Please enter a valid country name",
-    },
-    city: {
-      required: true,
-      minLength: 2,
-      message: "Please enter a valid city name",
-    },
-    district: {
-      required: true,
-      minLength: 2,
-      message: "Please enter a valid district name",
-    },
-    thana: {
-      required: true,
-      minLength: 2,
-      message: "Please enter a valid thana name",
-    },
-    date_of_birth: {
-      required: true,
-      validate: (value) => {
-        const today = new Date();
-        const dob = new Date(value);
-        let age = today.getFullYear() - dob.getFullYear();
-        const monthDiff = today.getMonth() - dob.getMonth();
-
-        if (
-          monthDiff < 0 ||
-          (monthDiff === 0 && today.getDate() < dob.getDate())
-        ) {
-          age--;
-        }
-
-        return age >= 5 && age <= 100;
-      },
-      message: "Age must be between 5 and 100 years",
-    },
-  };
-
-  function calculateAge(dobString) {
-    if (!dobString) return 0;
-
-    const today = new Date();
-    const dob = new Date(dobString);
-    let age = today.getFullYear() - dob.getFullYear();
-    const monthDiff = today.getMonth() - dob.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-      age--;
-    }
-
-    return age;
-  }
-
-  // Validate individual field
-  const validateField = (name, value) => {
-    const rule = validationRules[name];
-    if (!rule) return null;
-
-    if (rule.required && (!value || value.trim() === "")) {
-      return `${name
-        .replace("_", " ")
-        .replace(/\b\w/g, (l) => l.toUpperCase())} is required`;
-    }
-
-    if (rule.minLength && value.length < rule.minLength) {
-      return `${name
-        .replace("_", " ")
-        .replace(/\b\w/g, (l) => l.toUpperCase())} must be at least ${
-        rule.minLength
-      } characters`;
-    }
-
-    if (rule.pattern && !rule.pattern.test(value)) {
-      return rule.message;
-    }
-
-    if (rule.validate && !rule.validate(value)) {
-      return rule.message;
-    }
-
-    return null;
-  };
-
-  // Validate entire form
-  const validateForm = () => {
-    const errors = {};
-    const fieldsToValidate = Object.keys(validationRules);
-
-    fieldsToValidate.forEach((field) => {
-      const fieldVisible = getFieldVisibility(field);
-      if (fieldVisible) {
-        const error = validateField(field, formData[field]);
-        if (error) {
-          errors[field] = error;
-        }
-      }
-    });
-
-    // Additional validations
-    if (formData.kit_collection === "with_tshirt" && !formData.tshirt_size) {
-      errors.tshirt_size =
-        "T-shirt size is required when selecting kit with T-shirt";
-    }
-
-    if (
-      formData.kit_collection === "with_tshirt" &&
-      !formData.delivery_location
-    ) {
-      errors.delivery_location = "Please select a delivery location";
-    }
-
-    if (!formData.kit_collection) {
-      errors.kit_collection = "Please select kit collection option";
-    }
-
-    // File validation
-    const currentAge = calculateAge(formData.date_of_birth);
-    const cvRequired =
-      eventsDetail?.data?.product_data?.is_cv_upload_field === "yes" ||
-      currentAge >= 50;
-
-    if (cvRequired && !formData.cv) {
-      errors.cv = "NID upload is required";
-    }
-
-    if (formData.cv) {
-      const allowedTypes = [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "application/pdf",
-      ];
-      const maxSize = 5 * 1024 * 1024; // 5MB
-
-      if (!allowedTypes.includes(formData.cv.type)) {
-        errors.cv = "Please upload a valid file (JPG, PNG, or PDF)";
-      } else if (formData.cv.size > maxSize) {
-        errors.cv = "File size must be less than 5MB";
-      }
-    }
-
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  // Get field visibility
-  const getFieldVisibility = (fieldName) => {
-    const fieldMap = {
-      name: eventsDetail?.data?.product_data?.is_name_field === "yes",
-      email: eventsDetail?.data?.product_data?.is_email_field === "yes",
-      phone: eventsDetail?.data?.product_data?.is_phone_number_field === "yes",
-      full_address:
-        eventsDetail?.data?.product_data?.is_full_address_field === "yes",
-      country: eventsDetail?.data?.product_data?.is_country_field === "yes",
-      city: eventsDetail?.data?.product_data?.is_city_field === "yes",
-      district: eventsDetail?.data?.product_data?.is_district_field === "yes",
-      thana: eventsDetail?.data?.product_data?.is_thana_field === "yes",
-      date_of_birth:
-        eventsDetail?.data?.product_data?.is_date_of_birth_field === "yes",
-    };
-
-    return fieldMap[fieldName] || false;
-  };
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -272,7 +53,6 @@ export default function EventRegistration() {
     }
   }, [slug, API_BASE_URL]);
 
-  const price = eventsDetail?.data?.product_data?.price || 0;
   const km = eventsDetail?.data?.product_data?.km || "";
   const date = eventsDetail?.data?.product_data?.date || "";
   const location = eventsDetail?.data?.product_data?.location || "";
@@ -280,45 +60,6 @@ export default function EventRegistration() {
   const short_desc = eventsDetail?.data?.product_data?.short_desc || "";
 
   // Calculate delivery charge based on selected location
-  const deliveryCharge = DELIVERY_CHARGE[formData.delivery_location] || 0;
-  const totalPrice = Number(price) + deliveryCharge;
-
-  // Handle form submission and payment
-  const handleFormSubmitAndPayment = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch("/api/payment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          address: 'mohakhali',
-          city: 'dhaka',
-          amount: totalPrice,
-          kilometer: km,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error(`Payment API error: ${res.status}`);
-      }
-
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error("Payment URL not received");
-      }
-    } catch (error) {
-      console.error("Payment Error:", error);
-      setError(
-        "Payment processing failed. Please try again or contact support."
-      );
-    }
-  };
 
   // Error Alert Component
   const ErrorAlert = ({ message }) => (
@@ -362,7 +103,10 @@ export default function EventRegistration() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white">
+      <div
+        className="bg-gradient-to-r from-red-600 h-[40vh] flex items-center
+ to-red-700 text-white"
+      >
         <div className="max-w-6xl mx-auto px-4 py-8 text-center">
           <h1 className="text-4xl font-bold mb-2">{title}</h1>
           {short_desc && <p className="text-xl opacity-90">{short_desc}</p>}
@@ -419,32 +163,16 @@ export default function EventRegistration() {
                 <div className="flex justify-between items-center py-2">
                   <span className="text-gray-700">Event Registration</span>
                   <span className="font-semibold text-gray-800">
-                    {price} Tk
+                    {priceParam} Tk
                   </span>
                 </div>
-
-                {formData.kit_collection === "with_tshirt" && (
-                  <div className="flex justify-between items-center py-2">
-                    <div className="flex items-center gap-2">
-                      <Truck className="text-red-600 h-4 w-4" />
-                      <span className="text-gray-700">
-                        {formData.delivery_location === "inside_dhaka"
-                          ? "Delivery (Inside Dhaka)"
-                          : "Delivery (Outside Dhaka)"}
-                      </span>
-                    </div>
-                    <span className="font-semibold text-gray-800">
-                      {deliveryCharge} Tk
-                    </span>
-                  </div>
-                )}
 
                 <div className="border-t pt-3 mt-3 flex justify-between items-center">
                   <span className="text-lg font-bold text-gray-800">
                     Total Amount
                   </span>
                   <span className="text-2xl font-bold text-red-600">
-                    {totalPrice} Tk
+                    {priceParam} Tk
                   </span>
                 </div>
               </div>
@@ -453,7 +181,7 @@ export default function EventRegistration() {
 
           {/* Registration Form */}
           <div className="bg-white rounded-xl shadow-lg p-6">
-            <EventForm/>
+            <EventForm priceParam={priceParam} />
           </div>
         </div>
 

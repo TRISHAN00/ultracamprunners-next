@@ -1,10 +1,9 @@
 import axios from "axios";
+import { NextResponse } from "next/server";
 
 export async function POST(req) {
   const data = await req.formData();
   const formObj = Object.fromEntries(data);
-
-  console.log("✅ Payment Success:", formObj);
 
   const personalData = formObj.value_a ? formObj.value_a.split("|") : [];
   const addressData = formObj.value_b ? formObj.value_b.split("|") : [];
@@ -29,7 +28,6 @@ export async function POST(req) {
     formInputData.append("thana", thana);
     formInputData.append("country", country);
 
-
     formInputData.append("date_of_birth", date_of_birth);
     formInputData.append("t_shirt_size", t_shirt_size);
     formInputData.append("km", km);
@@ -49,18 +47,8 @@ export async function POST(req) {
     console.error("❌ Failed to submit form:", err.message);
   }
 
-  return Response.json({
-    message: "✅ Payment succeeded",
-    userData: {
-      name,
-      email,
-      phone,
-      amount,
-      full_address,
-      city,
-      thana,
-      country,
-    },
-    paymentData: formObj,
-  });
+  return NextResponse.redirect(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
+    302
+  );
 }

@@ -6,13 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import RegistrationCard from "../../components/event/RegistrationCard";
 
 export default function EventPage() {
   const [loading, setLoading] = useState(true);
+  const [selectedPrice, setSelectedPrice] = useState(0);
   const [error, setError] = useState(null);
   const [eventsDetail, setEventDetail] = useState();
   const path = useParams();
-
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -44,6 +45,13 @@ export default function EventPage() {
     (f) => f?.data?.slug === "important-notes"
   );
 
+  console.log(eventsDetail?.data?.posts?.list);
+
+  const handleSelectPrice = (price) => {
+    console.log(price);
+    setSelectedPrice(price);
+  };
+
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -56,7 +64,7 @@ export default function EventPage() {
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow pt-16">
         {/* Hero Section */}
-        <div className="relative h-[60vh] w-full">
+        <div className="relative h-[80vh] w-full overflow-hidden	 ">
           {eventsDetail?.data?.images?.list?.find((f) => f?.banner === "on")
             ?.full_path && (
             <Image
@@ -100,6 +108,28 @@ export default function EventPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
+              <div className="flex flex-wrap gap-4 justify-start">
+                {eventsDetail?.data?.posts?.list?.map((item, index) => {
+                  console.log("Event Item:", item); // 👈 log here
+                  return (
+                    <RegistrationCard
+                      key={index}
+                      title={item?.data?.title}
+                      price={item?.data?.subtitle}
+                      selectedPrice={selectedPrice}
+                      onSelectPrice={handleSelectPrice}
+                    />
+                  );
+                })}
+              </div>
+
+              {selectedPrice === 0 && (
+                <p className="text-red-600 font-medium mt-2">
+                  Please select a registration category before proceeding to
+                  checkout.
+                </p>
+              )}
+
               <section className="bg-white rounded-xl shadow-lg p-6 space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900">
                   Event Details
@@ -163,49 +193,56 @@ export default function EventPage() {
             </div>
 
             {/* Sidebar */}
-            <div className="space-y-6">
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  Select Your Distance
-                </h2>
-                <div className="space-y-4">
-                  <div className="border border-gray-200 rounded-lg p-4 hover:border-[#a52931] transition-colors group cursor-pointer">
-                    {eventsDetail?.data?.product_data?.km && (
-                      <h3 className="font-semibold text-gray-900 group-hover:text-[#a52931]">
-                        {eventsDetail?.data?.product_data?.km} KM
-                      </h3>
-                    )}
-                    {eventsDetail?.data?.product_data?.price && (
-                      <span className="text-[#a52931] font-bold">
-                        ৳ {eventsDetail?.data?.product_data?.price}
-                      </span>
-                    )}
+            {selectedPrice > 0 && (
+              <div className="space-y-6">
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                    Select Your Distance
+                  </h2>
+                  <div className="space-y-4">
+                    <div className="border border-gray-200 rounded-lg p-4 hover:border-[#a52931] transition-colors group ">
+                      {eventsDetail?.data?.product_data?.km && (
+                        <h3 className="font-semibold text-gray-900 group-hover:text-[#a52931]">
+                          {eventsDetail?.data?.product_data?.km} KM
+                        </h3>
+                      )}
+                      {selectedPrice && (
+                        <span className="text-[#a52931] font-bold">
+                          ৳ {selectedPrice}
+                        </span>
+                      )}
 
-                    <p className="text-sm text-gray-600">
-                      Challenge yourself with this distance.
-                    </p>
-                    <div className="mt-4">
-                      <Link href={`/ucr-events/${path.events}/checkout`}>
-                        <button className="w-full bg-[#333a3f] text-white py-2 px-4 rounded-md hover:bg-[#a52931] transition-colors">
-                          Select
-                        </button>
-                      </Link>
+                      <p className="text-sm text-gray-600">
+                        Challenge yourself with this distance.
+                      </p>
+                      <div className="mt-4">
+                        <Link
+                          href={`/ucr-events/${path.events}/checkout?price=${selectedPrice}`}
+                        >
+                          <button
+                            className="w-full bg-[#333a3f] text-white py-2 px-4 rounded-md hover:bg-[#a52931] transition-colors"
+                            disabled={selectedPrice === 0}
+                          >
+                            Checkout
+                          </button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {importantNotes?.data?.description && (
-                <div className="bg-white rounded-xl shadow-lg p-6">
-                  <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                    <AlertTriangle className="h-5 w-5 mr-2 text-[#a52931]" />
-                    Important Notes
-                  </h2>
-                  {importantNotes?.data?.description &&
-                    parse(importantNotes?.data?.description)}
-                </div>
-              )}
-            </div>
+                {importantNotes?.data?.description && (
+                  <div className="bg-white rounded-xl shadow-lg p-6">
+                    <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                      <AlertTriangle className="h-5 w-5 mr-2 text-[#a52931]" />
+                      Important Notes
+                    </h2>
+                    {importantNotes?.data?.description &&
+                      parse(importantNotes?.data?.description)}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </main>

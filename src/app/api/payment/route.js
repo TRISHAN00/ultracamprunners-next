@@ -24,8 +24,8 @@ export async function POST(req) {
     const transactionId = uuidv4();
 
     const payload = {
-      store_id: "teamr64c9e84055219",
-      store_passwd: "teamr64c9e84055219@ssl",
+      store_id: process.env.SSLCOMMERZ_STORE_ID,
+      store_passwd: process.env.SSLCOMMERZ_STORE_PASSWORD,
       total_amount: amount,
       currency: "BDT",
       tran_id: transactionId,
@@ -54,7 +54,7 @@ export async function POST(req) {
     };
 
     const response = await axios.post(
-      "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
+      "https://securepay.sslcommerz.com/gwprocess/v4/api.php",
       qs.stringify(payload), // convert to urlencoded format
       {
         headers: {
