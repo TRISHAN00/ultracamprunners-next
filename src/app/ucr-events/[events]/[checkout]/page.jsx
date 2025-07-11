@@ -58,6 +58,8 @@ export default function EventRegistration() {
   const location = eventsDetail?.data?.product_data?.location || "";
   const title = eventsDetail?.data?.product_data?.title || "Event";
   const short_desc = eventsDetail?.data?.product_data?.short_desc || "";
+  const kmList = eventsDetail?.data?.posts?.list;
+
 
   // Calculate delivery charge based on selected location
 
@@ -181,7 +183,7 @@ export default function EventRegistration() {
 
           {/* Registration Form */}
           <div className="bg-white rounded-xl shadow-lg p-6">
-            <EventForm priceParam={priceParam} />
+            <EventForm priceParam={priceParam} kmList={kmList} />
           </div>
         </div>
 

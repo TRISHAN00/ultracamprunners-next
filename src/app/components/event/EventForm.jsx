@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export default function EventForm({ priceParam }) {
+export default function EventForm({ priceParam, kmList }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,7 +27,7 @@ export default function EventForm({ priceParam }) {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setFormData({ ...formData, file: file }); // ✅ correct key
+    setFormData({ ...formData, file });
   };
 
   const handleSubmit = async (e) => {
@@ -107,20 +107,6 @@ export default function EventForm({ priceParam }) {
             required
           />
         </label>
-
-        {/* <label className="block">
-          Amount (BDT)
-          <input
-            type="number"
-            name="amount"
-            placeholder="Amount (BDT)"
-            value={formData.amount}
-            onChange={handleChange}
-            readOnly
-            className="w-full p-2 border"
-            required
-          />
-        </label> */}
 
         <label className="block">
           Full Address
@@ -217,12 +203,14 @@ export default function EventForm({ priceParam }) {
             value={formData.km}
             onChange={handleChange}
             className="w-full p-2 border"
+            required
           >
             <option value="">Select KM Category</option>
-            <option value="21.1KM">21.1KM</option>
-            <option value="15KM">15KM</option>
-            <option value="7.5KM">7.5KM</option>
-            <option value="1KM">1KM (kids 3-9 years)</option>
+            {kmList?.map((item) => (
+              <option key={item?.data?.id} value={item?.data?.title}>
+                {item?.data?.title}
+              </option>
+            ))}
           </select>
         </label>
 
@@ -233,11 +221,11 @@ export default function EventForm({ priceParam }) {
             value={formData.gender}
             onChange={handleChange}
             className="w-full p-2 border"
+            required
           >
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
-            <option value="Other">Other</option>
           </select>
         </label>
 
