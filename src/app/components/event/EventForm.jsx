@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export default function EventForm({ priceParam, kmList }) {
+export default function EventForm({ priceParam, kmList, kmParam }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,7 +13,7 @@ export default function EventForm({ priceParam, kmList }) {
     thana: "",
     date_of_birth: "",
     t_shirt_size: "",
-    km: "",
+    km: kmParam,
     gender: "",
     file: null,
   });
@@ -196,7 +196,7 @@ export default function EventForm({ priceParam, kmList }) {
           </select>
         </label>
 
-        <label className="block">
+        {/* <label className="block">
           KM Category
           <select
             name="km"
@@ -212,7 +212,7 @@ export default function EventForm({ priceParam, kmList }) {
               </option>
             ))}
           </select>
-        </label>
+        </label> */}
 
         <label className="block">
           Gender

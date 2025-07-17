@@ -9,7 +9,8 @@ import {
 } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import EventForm from "../../../components/event/EventForm";
+import EventForm from '../../../components/event/EventForm';
+
 
 export default function EventRegistration() {
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,7 @@ export default function EventRegistration() {
   const pathname = useParams();
   const searchParams = useSearchParams();
   const priceParam = searchParams.get("price");
+  const kmParam = searchParams.get("km");
 
   let slug = pathname.events;
 
@@ -183,7 +185,7 @@ export default function EventRegistration() {
 
           {/* Registration Form */}
           <div className="bg-white rounded-xl shadow-lg p-6">
-            <EventForm priceParam={priceParam} kmList={kmList} />
+            <EventForm priceParam={priceParam} kmParam={kmParam} />
           </div>
         </div>
 

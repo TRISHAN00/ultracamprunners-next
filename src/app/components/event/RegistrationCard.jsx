@@ -23,7 +23,7 @@ const RegistrationCard = ({ title, price, selectedPrice, onSelectPrice }) => {
 
       {/* Button */}
       <button
-        onClick={() => onSelectPrice(price)}
+        onClick={() => onSelectPrice(price, title)}
         className="text-white font-semibold px-6 py-2 mb-4 rounded hover:opacity-90 transition"
         style={{
           backgroundColor: isSelected ? "#6E5531" : "#353C3C",

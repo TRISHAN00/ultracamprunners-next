@@ -1,16 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import parse from "html-react-parser";
-import { AlertTriangle, Calendar, ChevronDown, Clock, MapPin, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  Calendar,
+  ChevronDown,
+  Clock,
+  MapPin,
+  Users,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import RegistrationCard from "../../components/event/RegistrationCard";
+import RegistrationCard from '../../components/event/RegistrationCard';
+
 
 export default function EventPage() {
   const [loading, setLoading] = useState(true);
   const [selectedPrice, setSelectedPrice] = useState(0);
+  const [selectedKm, setSelectedKm] = useState(0);
   const [error, setError] = useState(null);
   const [eventsDetail, setEventDetail] = useState();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -46,9 +55,9 @@ export default function EventPage() {
     (f) => f?.data?.slug === "important-notes"
   );
 
-  const handleSelectPrice = (price) => {
-    console.log(price);
+  const handleSelectPrice = (price, km) => {
     setSelectedPrice(price);
+    setSelectedKm(km);
   };
 
   if (loading) {
@@ -67,7 +76,9 @@ export default function EventPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Oops! Something went wrong</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Oops! Something went wrong
+          </h2>
           <p className="text-gray-600">{error}</p>
         </div>
       </div>
@@ -79,9 +90,13 @@ export default function EventPage() {
       <main className="flex-grow">
         {/* Hero Section - Improved for mobile */}
         <div className="relative h-[50vh] mt-10 sm:h-[60vh] md:h-[70vh] lg:h-[80vh] w-full overflow-hidden">
-          {eventsDetail?.data?.images?.list?.find((f) => f?.banner === "on")?.full_path && (
+          {eventsDetail?.data?.images?.list?.find((f) => f?.banner === "on")
+            ?.full_path && (
             <Image
-              src={eventsDetail.data.images.list.find((f) => f?.banner === "on")?.full_path}
+              src={
+                eventsDetail.data.images.list.find((f) => f?.banner === "on")
+                  ?.full_path
+              }
               alt="Event Image"
               fill
               className="object-fill"
@@ -99,7 +114,9 @@ export default function EventPage() {
                   {eventsDetail?.data?.product_data?.organized && (
                     <div className="flex items-center">
                       <Users className="h-4 w-4 sm:h-5 sm:w-5 mr-2 flex-shrink-0" />
-                      <span className="truncate">{eventsDetail?.data?.product_data?.organized}</span>
+                      <span className="truncate">
+                        {eventsDetail?.data?.product_data?.organized}
+                      </span>
                     </div>
                   )}
 
@@ -118,10 +135,8 @@ export default function EventPage() {
         {/* Content Section - Improved layout */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
-            
             {/* Main Content */}
             <div className="xl:col-span-2 space-y-6 lg:space-y-8">
-              
               {/* Registration Cards - Improved mobile layout */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
@@ -143,7 +158,8 @@ export default function EventPage() {
                   <div className="mt-4 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg">
                     <p className="text-red-700 font-medium text-sm sm:text-base flex items-center">
                       <AlertTriangle className="h-4 w-4 mr-2 flex-shrink-0" />
-                      Please select a registration category before proceeding to checkout.
+                      Please select a registration category before proceeding to
+                      checkout.
                     </p>
                   </div>
                 )}
@@ -154,7 +170,7 @@ export default function EventPage() {
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
                   Event Details
                 </h2>
-                
+
                 {eventsDetail?.data?.product_data?.short_desc && (
                   <p className="text-gray-600 mb-6 text-sm sm:text-base leading-relaxed">
                     {eventsDetail?.data?.product_data?.short_desc}
@@ -176,7 +192,9 @@ export default function EventPage() {
                     <div className="flex items-start text-gray-700">
                       <Clock className="h-5 w-5 mr-3 text-[#a52931] flex-shrink-0 mt-0.5" />
                       <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm sm:text-base mb-2">Cut-off Times</p>
+                        <p className="font-medium text-sm sm:text-base mb-2">
+                          Cut-off Times
+                        </p>
                         <div className="text-sm sm:text-base prose prose-sm max-w-none">
                           {parse(eventsDetail?.data?.product_data?.description)}
                         </div>
@@ -218,7 +236,6 @@ export default function EventPage() {
 
             {/* Sidebar - Improved mobile experience */}
             <div className="space-y-6">
-              
               {/* Distance Selection - Always visible on mobile */}
               {selectedPrice > 0 && (
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
@@ -230,7 +247,7 @@ export default function EventPage() {
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
                         {eventsDetail?.data?.product_data?.km && (
                           <h3 className="font-bold text-lg sm:text-xl text-gray-900 group-hover:text-[#a52931]">
-                            {eventsDetail?.data?.product_data?.km} KM
+                            {selectedKm}
                           </h3>
                         )}
                         {selectedPrice && (
@@ -239,13 +256,13 @@ export default function EventPage() {
                           </span>
                         )}
                       </div>
-                      
+
                       <p className="text-sm text-gray-600 mb-4">
                         Challenge yourself with this distance.
                       </p>
-                      
+
                       <Link
-                        href={`/ucr-events/${path.events}/checkout?price=${selectedPrice}`}
+                        href={`/ucr-events/${path.events}/checkout?price=${selectedPrice}&km=${selectedKm}`}
                         className="block"
                       >
                         <button
@@ -271,16 +288,18 @@ export default function EventPage() {
                       <AlertTriangle className="h-5 w-5 mr-2 text-[#a52931]" />
                       Important Notes
                     </h2>
-                    <ChevronDown 
+                    <ChevronDown
                       className={`h-5 w-5 text-gray-500 transition-transform lg:hidden ${
-                        showImportantNotes ? 'rotate-180' : ''
+                        showImportantNotes ? "rotate-180" : ""
                       }`}
                     />
                   </button>
-                  
-                  <div className={`mt-4 prose prose-sm max-w-none text-gray-600 ${
-                    showImportantNotes ? 'block' : 'hidden lg:block'
-                  }`}>
+
+                  <div
+                    className={`mt-4 prose prose-sm max-w-none text-gray-600 ${
+                      showImportantNotes ? "block" : "hidden lg:block"
+                    }`}
+                  >
                     {parse(importantNotes?.data?.description)}
                   </div>
                 </div>
@@ -294,10 +313,16 @@ export default function EventPage() {
           <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 lg:hidden z-50">
             <div className="flex items-center justify-between mb-2">
               <div>
-                <p className="text-sm text-gray-600">Selected: {eventsDetail?.data?.product_data?.km} KM</p>
-                <p className="font-bold text-[#a52931]">৳ {selectedPrice.toLocaleString()}</p>
+                <p className="text-sm text-gray-600">
+                  Selected: {eventsDetail?.data?.product_data?.km} KM
+                </p>
+                <p className="font-bold text-[#a52931]">
+                  ৳ {selectedPrice.toLocaleString()}
+                </p>
               </div>
-              <Link href={`/ucr-events/${path.events}/checkout?price=${selectedPrice}`}>
+              <Link
+                href={`/ucr-events/${path.events}/checkout?price=${selectedPrice}`}
+              >
                 <button className="bg-[#333a3f] text-white py-2 px-6 rounded-lg hover:bg-[#a52931] transition-colors font-medium">
                   Checkout
                 </button>
