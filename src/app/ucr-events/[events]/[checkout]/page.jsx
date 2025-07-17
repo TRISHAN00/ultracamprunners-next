@@ -16,6 +16,7 @@ export default function EventRegistration() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [eventsDetail, setEventDetail] = useState(null);
+  
 
   const pathname = useParams();
   const searchParams = useSearchParams();
@@ -152,7 +153,7 @@ export default function EventRegistration() {
                   <Ruler className="text-red-600 h-5 w-5" />
                   <div>
                     <p className="font-medium text-gray-800">Distance</p>
-                    <p className="text-gray-600">{km} KM</p>
+                    <p className="text-gray-600">{kmParam}</p>
                   </div>
                 </div>
               )}
