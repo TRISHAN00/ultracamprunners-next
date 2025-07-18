@@ -1,22 +1,14 @@
 "use client";
 
-import {
-  AlertCircle,
-  Calendar,
-  CheckCircle,
-  MapPin,
-  Ruler,
-} from "lucide-react";
+import { AlertCircle, Calendar, MapPin, Ruler } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import EventForm from '../../../components/event/EventForm';
-
+import EventForm from "../../../components/event/EventForm";
 
 export default function EventRegistration() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [eventsDetail, setEventDetail] = useState(null);
-  
 
   const pathname = useParams();
   const searchParams = useSearchParams();
@@ -62,7 +54,6 @@ export default function EventRegistration() {
   const title = eventsDetail?.data?.product_data?.title || "Event";
   const short_desc = eventsDetail?.data?.product_data?.short_desc || "";
   const kmList = eventsDetail?.data?.posts?.list;
-
 
   // Calculate delivery charge based on selected location
 
@@ -187,47 +178,6 @@ export default function EventRegistration() {
           {/* Registration Form */}
           <div className="bg-white rounded-xl shadow-lg p-6">
             <EventForm priceParam={priceParam} kmParam={kmParam} />
-          </div>
-        </div>
-
-        {/* Additional Information Section */}
-        <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold mb-4 text-gray-800">
-            Important Information
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="flex items-start gap-3">
-              <CheckCircle className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-              <div>
-                <h4 className="font-semibold text-gray-800">
-                  Registration Confirmation
-                </h4>
-                <p className="text-sm text-gray-600">
-                  You will receive a confirmation email after successful
-                  payment.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-              <div>
-                <h4 className="font-semibold text-gray-800">Kit Delivery</h4>
-                <p className="text-sm text-gray-600">
-                  T-shirts will be delivered 3-5 days before the event.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-              <div>
-                <h4 className="font-semibold text-gray-800">
-                  Age Verification
-                </h4>
-                <p className="text-sm text-gray-600">
-                  NID/Passport required for participants aged 50 and above.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
 

@@ -13,14 +13,16 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4 ">
             <Link href={"/"}>
-              <Image
-                src={logo}
-                alt="Ultra Camp Runners Logo"
-                width={150}
-                height={50}
-                className="h-12 w-auto mx-auto md:mx-0"
-              />
+              <div className="w-40 md:w-48 lg:w-52 mx-auto md:mx-0">
+                <Image
+                  src={logo}
+                  alt="Ultra Camp Runners Logo"
+                  className="w-full h-auto object-contain"
+                  priority
+                />
+              </div>
             </Link>
+
             <p className="text-muted-foreground max-w-sm mx-auto md:mx-0">
               Established in 2019, Ultra Camp Runners is Dhaka&apos;s premier
               marathon organizer, hosting 8 successful events. We foster a
@@ -84,7 +86,7 @@ export default function Footer() {
               <div className="flex items-start gap-2">
                 <MapPin className="h-5 w-5 text-[#AD242F] shrink-0 mt-1" />
                 <p className="text-muted-foreground">
-                  K-166, South Badda, Gulshan, Dhaka-1212
+                  K-59, South Badda, Gulshan, Dhaka-1212
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -99,10 +101,10 @@ export default function Footer() {
               <div className="flex items-center gap-2">
                 <Phone className="h-5 w-5 text-[#AD242F]" />
                 <Link
-                  href="tel:01886020826"
+                  href="tel:01758950857"
                   className="text-muted-foreground hover:text-primary"
                 >
-                  01886020826
+                  01758-950857
                 </Link>
               </div>
 

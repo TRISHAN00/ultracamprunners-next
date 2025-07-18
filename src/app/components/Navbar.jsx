@@ -1,20 +1,19 @@
-'use client'
-import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import logo from '../../app/assets/logo.png';
+"use client";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import logo from "../../app/assets/logo.png";
 
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/about-us', label: 'About Us' },
-  { href: '/ucr-events', label: 'Events' },
-  { href: '/ucr-race-crew', label: 'UCR Race Crew' },
-  { href: '/upcoming-events', label: 'Upcoming Events' },
-  { href: '/shop', label: 'Shop' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/contact-us', label: 'Contact Us' },
+  { href: "/", label: "Home" },
+  { href: "/about-us", label: "About Us" },
+  { href: "/ucr-events", label: "Events" },
+  { href: "/ucr-race-crew", label: "UCR Race Crew" },
+  { href: "/shop", label: "Shop" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact-us", label: "Contact Us" },
 ];
 
 export default function Navbar() {
@@ -26,12 +25,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16 px-4 lg:px-0">
           <div className="flex items-center gap-8">
             <Link href="/" className="text-2xl font-bold text-[#a52931]">
-              <Image
-                src={logo}
-                alt="ucr-logo"
-                width={150}
-                height={150}
-              />
+              <Image src={logo} alt="ucr-logo" width={200} height={180} />
             </Link>
           </div>
 
@@ -39,7 +33,10 @@ export default function Navbar() {
           <ul className="hidden lg:flex items-center space-x-8">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="py-2 text-gray-700 hover:text-[#AD242F]">
+                <Link
+                  href={link.href}
+                  className="py-2 text-gray-700 hover:text-[#AD242F]"
+                >
                   {link.label}
                 </Link>
               </li>

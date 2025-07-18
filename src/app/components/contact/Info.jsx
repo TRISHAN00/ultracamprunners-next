@@ -2,7 +2,6 @@
 
 import parse from "html-react-parser";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Info({ info }) {
   return (
@@ -17,9 +16,9 @@ export default function Info({ info }) {
               const icon = item?.images?.[0]?.full_path || "";
 
               return (
-                <Link
+                <div
                   key={item?.id || index}
-                  href={"/"}
+                  href="tel:01758950857"
                   className="group flex flex-col md:flex-row items-center gap-3 transition-colors "
                 >
                   <div className="p-2 rounded-full  text-white">
@@ -38,7 +37,7 @@ export default function Info({ info }) {
                       {parse(description)}
                     </p>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>

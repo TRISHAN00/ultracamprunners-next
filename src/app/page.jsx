@@ -87,9 +87,9 @@ export default function Home() {
       <Features data={features} />
       <JoinUCR data={joinUs} />
       <GallerySection data={gallery} />
-      <BlogSection data={blogs} />
-      <StatsSection data={counter} />
       <Services data={ourServices} />
+      <StatsSection data={counter} />
+      <BlogSection data={blogs} />
     </>
   );
 }

@@ -1,9 +1,15 @@
-const RegistrationCard = ({ title, price, selectedPrice, onSelectPrice }) => {
-  const isSelected = selectedPrice === price;
+const RegistrationCard = ({
+  title,
+  price,
+  selectedPrice,
+  onSelectPrice,
+  selectedKm,
+}) => {
+  const isSelected = selectedKm === title;
 
   return (
     <div
-      className={`w-60 border rounded-xl shadow-md flex flex-col items-center overflow-hidden transition-all ${
+      className={`w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-[260px] border rounded-xl shadow-md flex flex-col items-center overflow-hidden transition-all ${
         isSelected ? "border-[#353C3C] scale-105" : "border-gray-200"
       }`}
     >
@@ -19,7 +25,9 @@ const RegistrationCard = ({ title, price, selectedPrice, onSelectPrice }) => {
       <div className="w-4/5 my-4 border-t border-dashed border-gray-400" />
 
       {/* Price */}
-      <div className="text-xl font-semibold text-gray-700 mb-4">৳ {price}</div>
+      <div className="text-xl font-semibold text-gray-700 mb-4">
+        ৳ {price}
+      </div>
 
       {/* Button */}
       <button
@@ -34,6 +42,5 @@ const RegistrationCard = ({ title, price, selectedPrice, onSelectPrice }) => {
     </div>
   );
 };
-
 
 export default RegistrationCard;

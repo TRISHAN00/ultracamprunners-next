@@ -149,6 +149,7 @@ export default function EventPage() {
                       title={item?.data?.title}
                       price={item?.data?.subtitle}
                       selectedPrice={selectedPrice}
+                      selectedKm={selectedKm}
                       onSelectPrice={handleSelectPrice}
                     />
                   ))}
