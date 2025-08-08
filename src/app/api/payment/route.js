@@ -19,6 +19,8 @@ export async function POST(req) {
       km,
       gender,
       file,
+      emc,
+      nid
     } = body;
 
     const transactionId = uuidv4();
@@ -50,7 +52,7 @@ export async function POST(req) {
 
       value_a: `${name}|${email}|${phone}`,
       value_b: `${full_address}|${city}|${thana}|${country}`,
-      value_c: `${date_of_birth}|${t_shirt_size}|${km}|${gender}|${file}`,
+      value_c: `${date_of_birth}|${t_shirt_size}|${km}|${gender}|${file}|${emc}|${nid}`,
     };
 
     const response = await axios.post(

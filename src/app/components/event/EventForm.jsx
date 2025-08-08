@@ -6,6 +6,7 @@ export default function EventForm({ priceParam, kmList, kmParam }) {
     name: "",
     email: "",
     phone: "",
+    emc: "",
     amount: priceParam,
     full_address: "",
     country: "",
@@ -15,6 +16,7 @@ export default function EventForm({ priceParam, kmList, kmParam }) {
     t_shirt_size: "",
     km: kmParam,
     gender: "",
+    nid: "",
     file: null,
   });
 
@@ -109,6 +111,19 @@ export default function EventForm({ priceParam, kmList, kmParam }) {
         </label>
 
         <label className="block">
+          Emergency Contact
+          <input
+            type="tel"
+            name="emc"
+            placeholder="Emergency Contact"
+            value={formData.emc}
+            onChange={handleChange}
+            className="w-full p-2 border"
+            required
+          />
+        </label>
+
+        <label className="block">
           Full Address
           <input
             type="text"
@@ -157,6 +172,18 @@ export default function EventForm({ priceParam, kmList, kmParam }) {
         </label>
 
         <label className="block">
+          NID (National ID Card)
+          <input
+            type="text"
+            name="nid"
+            value={formData.nid}
+            onChange={handleChange}
+            className="w-full p-2 border"
+          />
+        </label>
+
+
+        <label className="block">
           Date of Birth
           <input
             type="date"
@@ -196,23 +223,6 @@ export default function EventForm({ priceParam, kmList, kmParam }) {
           </select>
         </label>
 
-        {/* <label className="block">
-          KM Category
-          <select
-            name="km"
-            value={formData.km}
-            onChange={handleChange}
-            className="w-full p-2 border"
-            required
-          >
-            <option value="">Select KM Category</option>
-            {kmList?.map((item) => (
-              <option key={item?.data?.id} value={item?.data?.title}>
-                {item?.data?.title}
-              </option>
-            ))}
-          </select>
-        </label> */}
 
         <label className="block">
           Gender

@@ -11,7 +11,7 @@ export async function POST(req) {
 
   const [name, email, phone] = personalData;
   const [full_address, city, thana, country] = addressData;
-  const [date_of_birth, t_shirt_size, km, gender, file] = infoData;
+  const [date_of_birth, t_shirt_size, km, gender, file, emc, nid] = infoData;
 
   const amount = formObj.amount;
 
@@ -27,6 +27,8 @@ export async function POST(req) {
     formInputData.append("city", city);
     formInputData.append("thana", thana);
     formInputData.append("country", country);
+    formInputData.append("emc", emc);
+    formInputData.append("nid", nid);
 
     formInputData.append("date_of_birth", date_of_birth);
     formInputData.append("t_shirt_size", t_shirt_size);
