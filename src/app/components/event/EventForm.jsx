@@ -177,6 +177,7 @@ export default function EventForm({ priceParam, kmList, kmParam }) {
             type="text"
             name="nid"
             value={formData.nid}
+            placeholder="Input NID Number"
             onChange={handleChange}
             className="w-full p-2 border"
           />

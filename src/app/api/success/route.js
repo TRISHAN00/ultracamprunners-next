@@ -16,7 +16,6 @@ export async function POST(req) {
   const amount = formObj.amount;
 
   try {
-    // ✅ Prepare FormData with just name, email, phone, and amount
     const formInputData = new FormData();
     formInputData.append("form_id", "event-form3");
     formInputData.append("name", name);
