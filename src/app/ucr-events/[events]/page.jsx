@@ -13,8 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import RegistrationCard from '../../components/event/RegistrationCard';
-
+import RegistrationCard from "../../components/event/RegistrationCard";
 
 export default function EventPage() {
   const [loading, setLoading] = useState(true);
@@ -314,15 +313,14 @@ export default function EventPage() {
           <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 lg:hidden z-50">
             <div className="flex items-center justify-between mb-2">
               <div>
-                <p className="text-sm text-gray-600">
-                  Selected: {eventsDetail?.data?.product_data?.km} KM
-                </p>
+                <p className="text-sm text-gray-600">Selected: {selectedKm}</p>
                 <p className="font-bold text-[#a52931]">
                   ৳ {selectedPrice.toLocaleString()}
                 </p>
               </div>
+
               <Link
-                href={`/ucr-events/${path.events}/checkout?price=${selectedPrice}`}
+                href={`/ucr-events/${path.events}/checkout?price=${selectedPrice}&km=${selectedKm}`}
               >
                 <button className="bg-[#333a3f] text-white py-2 px-6 rounded-lg hover:bg-[#a52931] transition-colors font-medium">
                   Checkout
