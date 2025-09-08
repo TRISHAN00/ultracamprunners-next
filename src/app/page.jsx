@@ -83,7 +83,7 @@ export default function Home() {
       <Hero data={hero} />
       <About data={aboutUs} />
       <ExploreEvents data={exploreEvent} />
-      <UpcomingEvents title={upcomingEvents} />
+      {upcomingEvents?.length > 0 && <UpcomingEvents title={upcomingEvents} />}
       <Features data={features} />
       <JoinUCR data={joinUs} />
       <GallerySection data={gallery} />
